@@ -1,0 +1,83 @@
+---
+import Field from './Field.astro';
+import SpamGuard from './SpamGuard.astro';
+import FormStatus from './FormStatus.astro';
+import Button from '@/components/ui/Button.astro';
+import { services } from '@/data/services';
+import { isPreview } from '@/config/build';
+import DemoNotice from './DemoNotice.astro';
+
+interface Props {
+  /** compact = homepage summary; full = contact page */
+  variant?: 'compact' | 'full';
+  id?: string;
+}
+const { variant = 'compact', id = 'quote-form' } = Astro.props;
+
+const serviceOptions = [
+  ...services.map((s) => ({ value: s.formValue, label: s.title })),
+  { value: 'consultation', label: 'Schedule a consultation' },
+  { value: 'other', label: 'Other / not sure' },
+];
+---
+
+<form id={id} class="relative" novalidate data-form="quote" aria-describedby={`${id}-privacy`}>
+  <DemoNotice />
+  <div class="grid gap-x-10 gap-y-6 md:grid-cols-2">
+    <Field name="full_name" label="Full name" required autocomplete="name" maxlength={120} />
+    <Field name="company" label="Company" autocomplete="organization" maxlength={160} />
+    <Field name="email" label="Email" type="email" required autocomplete="email" maxlength={200} />
+    <Field name="phone" label="Phone" type="tel" required autocomplete="tel" maxlength={30} pattern="[0-9+()\-.\s]{7,30}" />
+    <Field name="service" label="Service required" type="select" required options={serviceOptions} class="md:col-span-2" />
+    {
+      variant === 'full' && (
+        <>
+          <Field name="property_type" label="Property type" type="select" options={[
+            { value: 'commercial', label: 'Commercial' },
+            { value: 'industrial', label: 'Industrial / warehouse' },
+            { value: 'residential', label: 'Residential' },
+            { value: 'hospitality', label: 'Hospitality' },
+            { value: 'retail', label: 'Office / retail' },
+            { value: 'other', label: 'Other' },
+          ]} />
+          <Field name="project_location" label="Project location" autocomplete="address-level2" maxlength={160} />
+          <Field name="timeline" label="Preferred timeline" type="select" options={[
+            { value: 'urgent', label: 'Urgent / emergency' },
+            { value: 'within-week', label: 'Within a week' },
+            { value: 'within-month', label: 'Within a month' },
+            { value: 'flexible', label: 'Flexible' },
+            { value: 'recurring', label: 'Recurring / ongoing contract' },
+          ]} />
+          <Field name="preferred_contact" label="Preferred contact method" type="select" options={[
+            { value: 'phone', label: 'Phone' },
+            { value: 'email', label: 'Email' },
+          ]} />
+        </>
+      )
+    }
+    <Field name="message" label="Project details" type="textarea" required rows={variant === 'full' ? 6 : 4} maxlength={4000} class="md:col-span-2" />
+  </div>
+
+  <SpamGuard />
+
+  <div class="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+    <label class="consent flex max-w-[30rem] cursor-pointer items-start gap-4 text-[0.875rem] text-ink-500" data-field>
+      <input type="checkbox" name="privacy_consent" value="yes" required class="mt-0.5 size-4 shrink-0 accent-[var(--color-signal)]" />
+      <span id={`${id}-privacy`}>
+        I agree that QGS may use the information provided to respond to my inquiry, as described in the
+        <a href="/privacy" class="text-ink underline underline-offset-4">Privacy Notice</a>.
+        <span class="field-error mt-2 hidden text-signal" aria-live="polite"></span>
+      </span>
+    </label>
+    <Button type={isPreview ? 'button' : 'submit'} variant="primary" class="shrink-0 md:min-w-[15rem]" data-submit>
+      <span data-submit-label>Request a Quote</span>
+    </Button>
+  </div>
+
+  <FormStatus />
+</form>
+
+<script>
+  import { bindForms } from '@/scripts/forms';
+  bindForms();
+</script>

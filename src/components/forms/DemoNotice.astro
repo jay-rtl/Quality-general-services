@@ -1,0 +1,11 @@
+---
+import { isPreview } from '@/config/build';
+---
+
+{isPreview && (
+  <div class="mb-8 border-l-2 border-ink/30 pl-4 text-[0.875rem] text-ink-700" role="note" data-demo-notice>
+    <p class="font-medium">Client preview — demo form</p>
+    <p class="mt-1">Nothing is sent, uploaded, or stored. Use sample details and sample documents only.</p>
+    <noscript><p class="mt-1">JavaScript is required to try this demo. Submission is disabled.</p></noscript>
+  </div>
+)}

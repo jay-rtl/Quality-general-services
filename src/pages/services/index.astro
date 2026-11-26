@@ -1,0 +1,157 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import CtaBand from '@/components/layout/CtaBand.astro';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import Button from '@/components/ui/Button.astro';
+import { services, serviceHref } from '@/data/services';
+import { industries } from '@/data/company';
+import { ctas } from '@/data/navigation';
+import { site } from '@/config/site';
+
+import heroImg from '@/assets/images/placeholder/hero-restoration.jpg';
+---
+
+<BaseLayout
+  title="Our Services"
+  description="Restoration staffing and labour support, contents processing, commercial cleaning, post-construction cleaning, asbestos and mould remediation, and workforce solutions in Calgary."
+  transparentHeader
+>
+  <PageHero
+    eyebrow="Our services"
+    index="02"
+    title="Six core capabilities. Built for demanding sites."
+    lede={`Integrated cleaning, restoration support, specialized remediation, and workforce solutions across ${site.serviceArea}.`}
+    image={heroImg}
+    imageAlt="Placeholder: water-damaged commercial interior with drying equipment"
+  >
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4" data-reveal="fade">
+      <Button href={ctas.quote.href} variant="primary">{ctas.quote.label}</Button>
+      <Button href="#service-list" variant="outline-light">Browse services</Button>
+    </div>
+  </PageHero>
+
+  <!-- Quick editorial jump bar -->
+  <nav aria-label="Service index" class="border-b border-rule bg-bone">
+    <div class="container-x py-6">
+      <ol class="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          services.map((s) => (
+            <li>
+              <a href={`#${s.slug}`} class="group flex items-baseline gap-4 py-1 text-[0.9375rem] text-ink-700 transition-colors hover:text-signal">
+                <span class="index-num text-ink-400 group-hover:text-signal">{s.index}</span>
+                <span class="link-line">{s.navTitle}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Editorial service bands (alternating asymmetrical splits, no card grid) -->
+  <section id="service-list" class="bg-paper" aria-label="Services overview">
+    {
+      services.map((s, i) => {
+        const flip = i % 2 === 1;
+        return (
+          <article id={s.slug} class="section-y border-b border-rule last:border-b-0">
+            <div class="container-x">
+              <div class="grid items-center gap-y-12 lg:grid-cols-12 lg:gap-x-12">
+                <figure class:list={['lg:col-span-6', flip && 'lg:order-2']} data-reveal="image" data-from={flip ? 'right' : 'left'}>
+                  <a href={serviceHref(s)} class="group block overflow-hidden bg-ink">
+                    <Image
+                      src={s.image}
+                      alt={s.imageAlt}
+                      widths={[640, 960, 1264]}
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      class="aspect-[3/2] w-full object-cover transition-transform duration-1000 ease-[var(--ease-cine)] group-hover:scale-[1.04]"
+                      quality={72}
+                    />
+                  </a>
+                  <figcaption class="mt-3 flex justify-between text-[0.8125rem] text-ink-400">
+                    <span>{s.navTitle}</span>
+                    <span>Placeholder image</span>
+                  </figcaption>
+                </figure>
+
+                <div class:list={['lg:col-span-6', flip && 'lg:order-1']}>
+                  <Eyebrow index={s.index}>{s.navTitle}</Eyebrow>
+                  <h2 class="display-md mt-6 max-w-[18ch]" data-reveal="lines">
+                    <a href={serviceHref(s)} class="transition-colors duration-500 hover:text-signal">
+                      {s.title}
+                    </a>
+                  </h2>
+                  <p class="lede mt-6 max-w-[36rem] text-ink-500" data-reveal="fade">
+                    {s.summary}
+                  </p>
+                  {s.note && (
+                    <p class="mt-4 max-w-[36rem] border-l-2 border-ink/20 pl-4 text-[0.875rem] text-ink-500" data-reveal="fade">
+                      {s.note}
+                    </p>
+                  )}
+
+                  {s.scope.length > 0 && (
+                    <ul class="mt-8 grid max-w-[38rem] gap-x-8 text-[0.9375rem] text-ink-700 sm:grid-cols-2" data-reveal="fade">
+                      {s.scope.slice(0, 6).map((item) => (
+                        <li class="border-b border-rule py-3">{item}</li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <div class="mt-10 flex flex-wrap items-center gap-6" data-reveal="fade">
+                    <Button href={serviceHref(s)} variant="outline-dark">
+                      View service details
+                    </Button>
+                    <Button href={`/contact?service=${s.formValue}#quote`} variant="text-dark">
+                      Request a quote
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })
+    }
+  </section>
+
+  <!-- Industries served -->
+  <section class="section-y border-t border-rule bg-ink text-white" aria-labelledby="svc-industries-heading">
+    <div class="container-x">
+      <div class="grid gap-y-12 lg:grid-cols-12 lg:gap-x-10">
+        <div class="lg:col-span-4">
+          <Eyebrow tone="light">Who we serve</Eyebrow>
+          <h2 id="svc-industries-heading" class="display-md mt-8 max-w-[14ch]" data-reveal="lines">
+            Serving {site.serviceArea}.
+          </h2>
+          <p class="mt-6 text-white/65" data-reveal="fade">
+            We partner with commercial clients, contractors, and restoration companies on both scheduled maintenance and
+            project-specific scopes.
+          </p>
+        </div>
+        <ol class="grid gap-x-10 sm:grid-cols-2 lg:col-span-7 lg:col-start-6" data-stagger>
+          {
+            industries.map((name, i) => (
+              <li class="flex items-baseline gap-5 border-t border-white/12 py-5">
+                <span class="index-num text-white/40">{String(i + 1).padStart(2, '0')}</span>
+                <span class="text-[1.0625rem] text-white/90">{name}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    eyebrow="Request a quote"
+    title="Need a scope or staffing plan for your site?"
+    body="Share your project requirements and our team will follow up directly."
+    primaryHref={ctas.quote.href}
+    primaryLabel={ctas.quote.label}
+    secondaryHref={ctas.contact.href}
+    secondaryLabel={ctas.contact.label}
+  />
+</BaseLayout>

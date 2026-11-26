@@ -1,0 +1,29 @@
+{
+  "name": "quality-general-services",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Quality General Services frontend-only client approval preview",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check",
+    "build:github": "astro check && node tools/github-preview.mjs",
+    "test:github": "node tools/test-github-preview.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/sitemap": "^3.7.6",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "^7.4.13",
+    "gsap": "^3.15.1",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.1",
+    "parse5": "^8.1.1",
+    "playwright": "^1.65.1"
+  }
+}

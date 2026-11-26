@@ -1,0 +1,84 @@
+---
+interface Props {
+  name: string;
+  label: string;
+  hint: string;
+  accept: string;
+  extensions: string;
+  required?: boolean;
+  multiple?: boolean;
+  maxFiles?: number;
+  maxBytes?: number;
+  class?: string;
+}
+
+const {
+  name,
+  label,
+  hint,
+  accept,
+  extensions,
+  required = false,
+  multiple = false,
+  maxFiles = multiple ? 4 : 1,
+  maxBytes = 5 * 1024 * 1024,
+  class: className = '',
+} = Astro.props;
+
+const id = `fu-${name}-${Math.random().toString(36).slice(2, 7)}`;
+const errId = `${id}-err`;
+const hintId = `${id}-hint`;
+---
+
+<div class={`file-upload ${className}`} data-field data-file-upload>
+  <label for={id} class="block text-[0.9375rem] font-medium text-ink">
+    {label}{required ? <span class="text-signal" aria-hidden="true"> *</span> : <span class="font-normal text-ink-400"> (optional)</span>}
+  </label>
+
+  <div
+    class="dropzone relative mt-3 flex flex-col items-start justify-between gap-4 border border-dashed border-ink/25 bg-bone/60 px-6 py-7 transition-colors duration-300 sm:flex-row sm:items-center"
+    data-dropzone
+  >
+    <input
+      id={id}
+      type="file"
+      name={name}
+      accept={accept}
+      required={required}
+      multiple={multiple}
+      data-max-files={maxFiles}
+      data-max-bytes={maxBytes}
+      data-extensions={extensions}
+      aria-describedby={`${hintId} ${errId}`}
+      class="sr-only"
+    />
+    <div>
+      <p class="text-[0.9375rem] text-ink">
+        Drop {multiple ? 'files' : 'a file'} here, or
+        <label for={id} class="cursor-pointer font-medium text-signal underline underline-offset-4 hover:text-signal-dark">
+          browse your device
+        </label>
+      </p>
+      <p id={hintId} class="mt-1.5 text-[0.8125rem] text-ink-400">{hint}</p>
+    </div>
+    <label
+      for={id}
+      class="inline-flex h-10 shrink-0 cursor-pointer items-center border border-ink/25 bg-paper px-4 text-[0.8125rem] font-medium text-ink transition-colors hover:border-ink hover:bg-ink hover:text-white"
+    >
+      Choose {multiple ? 'files' : 'file'}
+    </label>
+  </div>
+
+  <ul class="mt-3 grid gap-2" data-file-list aria-live="polite"></ul>
+  <p id={errId} class="field-error mt-2 hidden text-[0.8125rem] text-signal" aria-live="polite"></p>
+</div>
+
+<style>
+  .file-upload[data-dragging='true'] .dropzone {
+    border-color: var(--color-signal);
+    background: rgb(217 0 0 / 0.04);
+  }
+  .file-upload[data-invalid='true'] .dropzone {
+    border-color: var(--color-signal);
+  }
+</style>

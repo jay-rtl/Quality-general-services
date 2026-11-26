@@ -1,0 +1,104 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'textarea' | 'select' | 'date' | 'url';
+  required?: boolean;
+  autocomplete?: HTMLAttributes<'input'>['autocomplete'];
+  options?: { value: string; label: string }[];
+  placeholder?: string;
+  hint?: string;
+  rows?: number;
+  maxlength?: number;
+  pattern?: string;
+  class?: string;
+  tone?: 'light' | 'dark';
+}
+
+const {
+  name,
+  label,
+  type = 'text',
+  required = false,
+  autocomplete,
+  options = [],
+  placeholder = ' ',
+  hint,
+  rows = 4,
+  maxlength,
+  pattern,
+  class: className = '',
+} = Astro.props;
+
+const id = `f-${name}-${Math.random().toString(36).slice(2, 7)}`;
+const errId = `${id}-err`;
+const hintId = hint ? `${id}-hint` : undefined;
+const describedBy = [hintId, errId].filter(Boolean).join(' ');
+const control =
+  'field-control peer block w-full border-0 border-b border-ink/25 bg-transparent px-0 pb-3 pt-7 text-[1.0625rem] text-ink outline-none transition-colors duration-300 focus:border-ink';
+---
+
+<div class={`field relative ${className}`} data-field>
+  {
+    type === 'textarea' ? (
+      <textarea id={id} name={name} rows={rows} required={required} maxlength={maxlength} placeholder={placeholder} aria-describedby={describedBy} class={`${control} resize-y`} />
+    ) : type === 'select' ? (
+      <select id={id} name={name} required={required} aria-describedby={describedBy} class={`${control} cursor-pointer appearance-none pr-8`}>
+        <option value="" selected disabled hidden />
+        {options.map((o) => (
+          <option value={o.value}>{o.label}</option>
+        ))}
+      </select>
+    ) : (
+      <input
+        id={id}
+        name={name}
+        type={type}
+        required={required}
+        autocomplete={autocomplete}
+        maxlength={maxlength}
+        pattern={pattern}
+        placeholder={placeholder}
+        aria-describedby={describedBy}
+        class={control}
+      />
+    )
+  }
+  <label for={id} class="field-label pointer-events-none absolute left-0 top-7 origin-left text-[1.0625rem] text-ink-400 transition-all duration-300 ease-[var(--ease-cine)]">
+    {label}{required ? <span class="text-signal" aria-hidden="true"> *</span> : <span class="text-ink-300"> (optional)</span>}
+  </label>
+  {
+    type === 'select' && (
+      <svg class="pointer-events-none absolute bottom-5 right-1 size-2.5 text-ink-400" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <path d="M1 1l4 4 4-4" />
+      </svg>
+    )
+  }
+  <span class="field-line pointer-events-none absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-signal transition-transform duration-500 ease-[var(--ease-cine)]" aria-hidden="true"></span>
+  {hint && <p id={hintId} class="mt-2 text-[0.8125rem] text-ink-400">{hint}</p>}
+  <p id={errId} class="field-error mt-2 hidden text-[0.8125rem] text-signal" aria-live="polite"></p>
+</div>
+
+<style>
+  .field-control:focus ~ .field-label,
+  .field-control:not(:placeholder-shown) ~ .field-label,
+  select.field-control:valid ~ .field-label,
+  .field[data-filled='true'] .field-label {
+    transform: translateY(-1.5rem) scale(0.78);
+    color: var(--color-ink-500);
+  }
+  .field-control:focus ~ .field-line {
+    transform: scaleX(1);
+  }
+  .field[data-invalid='true'] .field-control {
+    border-color: var(--color-signal);
+  }
+  .field[data-invalid='true'] .field-error {
+    display: block;
+  }
+  textarea.field-control {
+    min-height: 7rem;
+  }
+</style>

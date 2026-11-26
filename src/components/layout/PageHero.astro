@@ -1,0 +1,67 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+
+interface Props {
+  eyebrow: string;
+  index?: string;
+  title: string;
+  lede?: string;
+  backHref?: string;
+  backLabel?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+}
+
+const { eyebrow, index, title, lede, backHref, backLabel, image, imageAlt = '' } = Astro.props;
+---
+
+<section class="relative isolate overflow-hidden bg-ink pb-20 pt-[calc(var(--header-h)+4.5rem)] text-white md:pb-28 md:pt-[calc(var(--header-h)+7rem)]">
+  {
+    image && (
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="absolute inset-x-0 -inset-y-[12%]" data-parallax="8">
+          <Image src={image} alt={imageAlt} widths={[768, 1264, 1376]} sizes="100vw" class="h-full w-full object-cover" quality={72} loading="eager" fetchpriority="high" />
+        </div>
+        <div class="absolute inset-0 bg-ink/65" aria-hidden="true"></div>
+        <div class="page-hero-shade absolute inset-0" aria-hidden="true"></div>
+      </div>
+    )
+  }
+
+  <div class="container-x relative">
+    {
+      backHref && backLabel && (
+        <a
+          href={backHref}
+          class="mb-10 inline-flex items-center gap-3 text-[0.875rem] text-white/65 transition-colors hover:text-white"
+          data-reveal="fade"
+        >
+          <span aria-hidden="true">←</span>
+          <span class="link-line">{backLabel}</span>
+        </a>
+      )
+    }
+
+    <div class="grid gap-y-10 lg:grid-cols-12 lg:gap-x-10">
+      <div class="lg:col-span-9">
+        <Eyebrow index={index} tone="light">{eyebrow}</Eyebrow>
+        <h1 class="display-lg mt-8 max-w-[18ch] text-balance" data-reveal="lines">{title}</h1>
+        {lede && <p class="lede mt-8 max-w-[40rem] text-white/75" data-reveal="fade">{lede}</p>}
+        <slot />
+      </div>
+      <div class="flex flex-col justify-end lg:col-span-3">
+        <slot name="meta" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero-shade {
+    background:
+      linear-gradient(90deg, rgb(14 20 37 / 0.85) 0%, rgb(14 20 37 / 0.35) 55%, rgb(14 20 37 / 0.1) 100%),
+      linear-gradient(0deg, rgb(14 20 37 / 0.8) 0%, rgb(14 20 37 / 0) 45%);
+  }
+</style>

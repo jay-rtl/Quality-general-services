@@ -1,0 +1,110 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import QuoteForm from '@/components/forms/QuoteForm.astro';
+import { site } from '@/config/site';
+
+import heroImg from '@/assets/images/placeholder/hero-commercial.jpg';
+
+const a = site.contact.address;
+
+const inquiries = [
+  'Commercial & recurring janitorial cleaning quotes',
+  'Restoration staffing & emergency labour support',
+  'Contents processing, pack-out & cleaning',
+  'Post-construction & renovation cleanup',
+  'Asbestos abatement & mould remediation inquiries',
+  'Project-based workforce & consultation scheduling',
+];
+---
+
+<BaseLayout
+  title="Contact Us & Request a Quote"
+  description="Contact Quality General Services in Calgary to request a quote, schedule a consultation, or inquire about restoration staffing, commercial cleaning, and remediation."
+  transparentHeader
+>
+  <PageHero
+    eyebrow="Contact"
+    index="05"
+    title="Request a quote or speak with our team."
+    lede={`Serving restoration companies, general contractors, property managers, and commercial organizations across ${site.serviceArea}.`}
+    image={heroImg}
+    imageAlt="Placeholder: commercial office atrium being maintained at dusk"
+  >
+    <dl slot="meta" class="grid grid-cols-2 gap-6 border-t border-white/15 pt-6 text-[0.9375rem] lg:grid-cols-1" data-reveal="fade">
+      <div>
+        <dt class="eyebrow text-white/50">Phone</dt>
+        <dd class="mt-2"><a href={site.contact.phoneHref} class="link-line text-white">{site.contact.phoneDisplay}</a></dd>
+      </div>
+      <div>
+        <dt class="eyebrow text-white/50">Email</dt>
+        <dd class="mt-2"><a href={`mailto:${site.contact.email}`} class="link-line break-all text-white">{site.contact.email}</a></dd>
+      </div>
+    </dl>
+  </PageHero>
+
+  <!-- Main Contact + Full Quote Form -->
+  <section id="quote" class="section-y bg-paper" aria-labelledby="contact-form-heading">
+    <div class="container-x">
+      <div class="grid gap-y-16 lg:grid-cols-12 lg:gap-x-10">
+        <div class="lg:col-span-4">
+          <Eyebrow index="01">Direct contact</Eyebrow>
+          <h2 id="contact-form-heading" class="display-md mt-8" data-reveal="lines">Tell us about your project.</h2>
+          <p class="mt-6 max-w-[24rem] text-ink-500" data-reveal="fade">
+            Share your scope, property type, and preferred timeline. Our team will follow up directly to discuss next
+            steps or arrange a consultation.
+          </p>
+
+          <dl class="mt-12 grid gap-8 border-t border-rule pt-10 text-[0.9375rem]" data-stagger>
+            <div>
+              <dt class="eyebrow text-ink-400">Phone / WhatsApp</dt>
+              <dd class="mt-3 text-[1.25rem] tracking-[-0.01em]">
+                <a href={site.contact.phoneHref} class="link-line">{site.contact.phoneDisplay}</a>
+              </dd>
+            </div>
+            <div>
+              <dt class="eyebrow text-ink-400">Email</dt>
+              <dd class="mt-3 break-all text-[1.0625rem]">
+                <a href={`mailto:${site.contact.email}`} class="link-line">{site.contact.email}</a>
+              </dd>
+            </div>
+            <div>
+              <dt class="eyebrow text-ink-400">Address</dt>
+              <dd class="mt-3 text-[1.0625rem] text-ink-700">
+                {a.street}<br />{a.city}, {a.region}
+              </dd>
+            </div>
+            <div>
+              <dt class="eyebrow text-ink-400">Service area</dt>
+              <dd class="mt-3 text-[1.0625rem] text-ink-700">{site.serviceArea}</dd>
+            </div>
+          </dl>
+
+          <div class="mt-12 border-t border-rule pt-10" data-reveal="fade">
+            <p class="eyebrow text-ink-400">How we can help</p>
+            <ul class="mt-6 space-y-3 text-[0.9375rem] text-ink-700">
+              {
+                inquiries.map((item) => (
+                  <li class="flex items-start gap-3">
+                    <span class="mt-2 size-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                    <span>{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <div class="mt-12 border-t border-rule pt-8 text-[0.9375rem] text-ink-500" data-reveal="fade">
+            Looking for employment? Visit our <a href="/careers#apply" class="link-line font-medium text-ink">Careers page</a> to
+            submit an application and upload your résumé.
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 lg:col-start-6 lg:pt-2" data-reveal="fade">
+          <QuoteForm variant="full" id="contact-quote" />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

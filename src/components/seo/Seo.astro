@@ -1,0 +1,69 @@
+---
+import { site } from '@/config/site';
+import { isPreview, PRODUCTION_ORIGIN, withoutBase } from '@/config/build';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = site.description,
+  image = '/og/qgs-og.jpg',
+  noindex = false,
+  type = 'website',
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Restoration Support, Commercial Cleaning & Workforce Solutions in Calgary`;
+const canonical = new URL(withoutBase(Astro.url.pathname), isPreview ? PRODUCTION_ORIGIN : Astro.site);
+const imagePath = isPreview && image.startsWith('/') ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${image}` : image;
+const ogImage = new URL(imagePath, Astro.site);
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.name,
+  alternateName: site.shortName,
+  description: site.description,
+  url: Astro.site?.toString(),
+  email: site.contact.email,
+  telephone: site.contact.phoneHref.replace('tel:', ''),
+  foundingDate: String(site.established),
+  areaServed: site.serviceArea,
+  logo: new URL('/brand/qgs-logo-on-navy.svg', Astro.site).toString(),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.contact.address.street,
+    addressLocality: site.contact.address.city,
+    addressRegion: site.contact.address.region,
+    addressCountry: site.contact.address.country,
+  },
+};
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{(noindex || isPreview) && <meta name="robots" content={isPreview ? 'noindex, nofollow, noarchive' : 'noindex, nofollow'} />}
+{isPreview && <meta name="googlebot" content="noindex, nofollow, noarchive" />}
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_CA" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{!isPreview && <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />}

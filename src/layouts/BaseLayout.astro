@@ -1,0 +1,60 @@
+---
+import '@/styles/global.css';
+import Seo from '@/components/seo/Seo.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import { isPreview } from '@/config/build';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  /** Header starts transparent over a dark, full-bleed hero */
+  transparentHeader?: boolean;
+}
+
+const { transparentHeader = false, ...seo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0e1425" />
+    <link rel="icon" type="image/svg+xml" href="/brand/qgs-mark.svg" />
+    {!isPreview && <link rel="sitemap" href="/sitemap-index.xml" />}
+    <Seo {...seo} />
+    <script is:inline>
+      // Progressive enhancement flags. Content stays visible without JS
+      // or with reduced motion; a watchdog reveals everything if motion fails to boot.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion-ok');
+        setTimeout(function () {
+          if (!d.classList.contains('motion-ready')) d.classList.remove('motion-ok');
+        }, 3000);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-paper focus:px-4 focus:py-3 focus:text-ink"
+      >Skip to content</a
+    >
+    <Header transparent={transparentHeader} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import { initMotion } from '@/scripts/motion';
+      import { initHeader } from '@/scripts/header';
+      initHeader();
+      initMotion();
+    </script>
+  </body>
+</html>

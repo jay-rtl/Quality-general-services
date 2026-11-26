@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import Button from '@/components/ui/Button.astro';
+import { ctas } from '@/data/navigation';
+---
+
+<BaseLayout title="Page Not Found" noindex transparentHeader>
+  <section class="flex min-h-[82svh] items-center bg-ink pb-24 pt-[calc(var(--header-h)+5rem)] text-white">
+    <div class="container-x">
+      <Eyebrow index="404" tone="light">Page not found</Eyebrow>
+      <h1 class="display-lg mt-8 max-w-[16ch]">That page isn't here.</h1>
+      <p class="lede mt-6 max-w-[34rem] text-white/70">
+        The link may have moved or been mistyped. Use the navigation above or jump straight to our services or quote form.
+      </p>
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
+        <Button href="/" variant="primary">Back to Home</Button>
+        <Button href={ctas.services.href} variant="outline-light">{ctas.services.label}</Button>
+        <Button href={ctas.quote.href} variant="outline-light">{ctas.quote.label}</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

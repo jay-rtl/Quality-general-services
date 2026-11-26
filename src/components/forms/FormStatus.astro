@@ -1,0 +1,13 @@
+<div class="form-status mt-8 hidden border-l-2 pl-5" role="status" aria-live="polite" tabindex="-1" data-form-status>
+  <p class="font-medium" data-status-title></p>
+  <p class="mt-1 text-[0.9375rem] text-ink-500" data-status-body></p>
+</div>
+
+<style>
+  .form-status[data-tone='success'] {
+    border-color: var(--color-ink);
+  }
+  .form-status[data-tone='error'] {
+    border-color: var(--color-signal);
+  }
+</style>

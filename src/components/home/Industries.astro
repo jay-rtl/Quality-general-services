@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import { industries } from '@/data/company';
+import warehouse from '@/assets/images/placeholder/gallery-warehouse.jpg';
+---
+
+<section class="section-y bg-bone" aria-labelledby="ind-heading">
+  <div class="container-x">
+    <div class="grid gap-y-16 lg:grid-cols-12 lg:gap-x-10">
+      <div class="lg:col-span-4">
+        <div class="lg:sticky lg:top-[calc(var(--header-h)+3rem)]">
+          <Eyebrow index="04">Industries</Eyebrow>
+          <h2 id="ind-heading" class="display-md mt-10 max-w-[14ch]" data-reveal="lines">
+            Built for the people who keep buildings running.
+          </h2>
+          <p class="mt-8 max-w-[26rem] text-ink-500" data-reveal="fade">
+            We support project-based work and ongoing facility maintenance for commercial, industrial and restoration clients
+            across Calgary.
+          </p>
+        </div>
+      </div>
+
+      <ol class="ind-list lg:col-span-7 lg:col-start-6">
+        {
+          industries.map((name, i) => (
+            <li class="ind-row group grid grid-cols-[3rem_1fr] items-baseline border-t border-ink/12 py-6 md:grid-cols-[5rem_1fr] md:py-8" data-reveal="fade">
+              <span class="index-num text-ink-400 transition-colors duration-500 group-hover:text-signal">{String(i + 1).padStart(2, '0')}</span>
+              <span class="ind-name text-[clamp(1.375rem,2.6vw,2.5rem)] font-medium leading-[1.1] tracking-[-0.03em] transition-transform duration-700 ease-[var(--ease-cine)] group-hover:translate-x-3">
+                {name}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+
+  <figure class="container-x mt-24 md:mt-36">
+    <div class="relative h-[52vh] min-h-[340px] overflow-hidden md:h-[78vh]" data-reveal="image">
+      <div class="absolute inset-x-0 -inset-y-[12%]" data-parallax="8">
+        <Image src={warehouse} alt="Placeholder: ride-on scrubber cleaning a long warehouse aisle" widths={[768, 1264]} sizes="100vw" class="h-full w-full object-cover" quality={72} />
+      </div>
+    </div>
+    <figcaption class="mt-4 flex justify-between text-[0.8125rem] text-ink-400">
+      <span>Industrial &amp; warehouse facilities</span>
+      <span>Placeholder image</span>
+    </figcaption>
+  </figure>
+</section>
+
+<style>
+  .ind-row {
+    border-color: rgb(14 20 37 / 0.12);
+  }
+  .ind-row:last-child {
+    border-bottom: 1px solid rgb(14 20 37 / 0.12);
+  }
+</style>

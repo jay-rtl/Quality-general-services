@@ -1,0 +1,39 @@
+---
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import QuoteForm from '@/components/forms/QuoteForm.astro';
+import { site } from '@/config/site';
+const a = site.contact.address;
+---
+
+<section id="quote" class="section-y bg-paper" aria-labelledby="quote-heading">
+  <div class="container-x">
+    <div class="grid gap-y-16 lg:grid-cols-12 lg:gap-x-10">
+      <div class="lg:col-span-4">
+        <Eyebrow index="07">Request a quote</Eyebrow>
+        <h2 id="quote-heading" class="display-lg mt-10" data-reveal="lines">Tell us about your site.</h2>
+        <p class="mt-8 max-w-[24rem] text-ink-500" data-reveal="fade">
+          Share a few details and our team will follow up to discuss scope, scheduling and next steps.
+        </p>
+
+        <dl class="mt-14 grid gap-8 text-[0.9375rem]" data-stagger>
+          <div>
+            <dt class="eyebrow text-ink-400">Phone</dt>
+            <dd class="mt-3 text-[1.25rem] tracking-[-0.01em]"><a href={site.contact.phoneHref} class="link-line">{site.contact.phoneDisplay}</a></dd>
+          </div>
+          <div>
+            <dt class="eyebrow text-ink-400">Email</dt>
+            <dd class="mt-3 break-all text-[1.0625rem]"><a href={`mailto:${site.contact.email}`} class="link-line">{site.contact.email}</a></dd>
+          </div>
+          <div>
+            <dt class="eyebrow text-ink-400">Office</dt>
+            <dd class="mt-3 text-[1.0625rem] text-ink-700">{a.street}<br />{a.city}, {a.region}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="lg:col-span-7 lg:col-start-6 lg:pt-4" data-reveal="fade">
+        <QuoteForm variant="compact" id="home-quote" />
+      </div>
+    </div>
+  </div>
+</section>

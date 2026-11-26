@@ -1,0 +1,86 @@
+---
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import { advantages } from '@/data/company';
+import { site } from '@/config/site';
+---
+
+<section class="section-y relative overflow-hidden bg-ink text-white" aria-labelledby="exp-heading" data-experience>
+  <div class="container-x">
+    <div class="grid gap-y-16 lg:grid-cols-12 lg:gap-x-10">
+      <div class="lg:col-span-6">
+        <Eyebrow index="03" tone="light">Experience</Eyebrow>
+
+        <div class="mt-14 md:mt-20">
+          <p class="text-[0.9375rem] uppercase tracking-[0.18em] text-white/55" data-reveal="fade">Nearly</p>
+          <p class="exp-number font-semibold leading-[0.8] tracking-[-0.06em]" aria-hidden="true">
+            <span data-count-to="20">20</span><span class="text-brand">.</span>
+          </p>
+          <h2 id="exp-heading" class="display-sm mt-8 max-w-[22ch]" data-reveal="lines">
+            <span class="sr-only">Nearly 20 </span>years of combined hands-on experience across restoration and construction.
+          </h2>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 lg:col-start-8 lg:pt-28">
+        <p class="lede text-white/70" data-reveal="fade">
+          Although {site.name} was established in {site.established}, our two business partners bring deep practical
+          knowledge from demanding restoration and construction environments.
+        </p>
+        <dl class="mt-12 grid gap-px bg-white/10 sm:grid-cols-2" data-stagger>
+          <div class="bg-ink py-6 pr-6">
+            <dt class="display-sm">10+ years</dt>
+            <dd class="mt-2 text-[0.9375rem] text-white/60">One partner in the restoration industry</dd>
+          </div>
+          <div class="bg-ink py-6 sm:pl-6">
+            <dt class="display-sm">~10 years</dt>
+            <dd class="mt-2 text-[0.9375rem] text-white/60">The other in practical, on-site work</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="mt-28 md:mt-40">
+      <div class="grid gap-y-8 lg:grid-cols-12 lg:gap-x-10">
+        <p class="eyebrow text-white/50 lg:col-span-3" data-reveal="fade">What sets us apart</p>
+        <ol class="lg:col-span-9">
+          {
+            advantages.map((a, i) => (
+              <li class="adv-row grid gap-4 border-t border-white/12 py-9 md:grid-cols-12 md:gap-10 md:py-11" data-reveal="fade">
+                <span class="index-num text-white/40 md:col-span-1">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="display-sm md:col-span-5">{a.title}</h3>
+                <p class="text-white/60 md:col-span-6">{a.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .exp-number {
+    font-size: clamp(9rem, 26vw, 24rem);
+    font-variation-settings: 'wdth' 88;
+    margin-left: -0.06em;
+  }
+  .adv-row {
+    border-color: rgb(255 255 255 / 0.12);
+  }
+</style>
+
+<script>
+  import { gsap, prefersReducedMotion } from '@/scripts/motion';
+  const el = document.querySelector<HTMLElement>('[data-count-to]');
+  if (el && !prefersReducedMotion()) {
+    const target = Number(el.dataset.countTo);
+    const obj = { v: 0 };
+    el.textContent = '0';
+    gsap.to(obj, {
+      v: target,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 90%', end: 'top 35%', scrub: 0.8 },
+      onUpdate: () => (el.textContent = String(Math.round(obj.v))),
+    });
+  }
+</script>

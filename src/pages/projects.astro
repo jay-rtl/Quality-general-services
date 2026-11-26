@@ -1,0 +1,288 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import CtaBand from '@/components/layout/CtaBand.astro';
+import { ctas } from '@/data/navigation';
+
+import heroRestoration from '@/assets/images/placeholder/hero-restoration.jpg';
+import heroCommercial from '@/assets/images/placeholder/hero-commercial.jpg';
+import heroConstruction from '@/assets/images/placeholder/hero-construction.jpg';
+import heroRemediation from '@/assets/images/placeholder/hero-remediation.jpg';
+import svcRestoration from '@/assets/images/placeholder/service-restoration.jpg';
+import svcContents from '@/assets/images/placeholder/service-contents.jpg';
+import svcCommercial from '@/assets/images/placeholder/service-commercial.jpg';
+import svcPostConstruction from '@/assets/images/placeholder/service-postconstruction.jpg';
+import galWarehouse from '@/assets/images/placeholder/gallery-warehouse.jpg';
+import galHotel from '@/assets/images/placeholder/gallery-hotel.jpg';
+import galDemolition from '@/assets/images/placeholder/gallery-demolition.jpg';
+import galEquipment from '@/assets/images/placeholder/gallery-equipment.jpg';
+
+type Category = 'restoration' | 'contents' | 'commercial' | 'post-construction' | 'remediation';
+
+interface GalleryItem {
+  image: ImageMetadata;
+  alt: string;
+  label: string;
+  service: string;
+  category: Category;
+  span: 'wide' | 'tall' | 'standard';
+}
+
+const filters: { id: 'all' | Category; label: string }[] = [
+  { id: 'all', label: 'All work' },
+  { id: 'restoration', label: 'Restoration support' },
+  { id: 'contents', label: 'Contents processing' },
+  { id: 'commercial', label: 'Commercial cleaning' },
+  { id: 'post-construction', label: 'Post-construction' },
+  { id: 'remediation', label: 'Remediation & site work' },
+];
+
+// Clearly marked placeholder imagery categorized by QGS service types only.
+// No invented project names, clients, dates, or completion counts.
+const items: GalleryItem[] = [
+  {
+    image: heroRestoration,
+    alt: 'Placeholder: technician checking moisture in a water-damaged commercial space with drying equipment',
+    label: 'Water damage restoration support',
+    service: 'Restoration Support',
+    category: 'restoration',
+    span: 'wide',
+  },
+  {
+    image: galHotel,
+    alt: 'Placeholder: commercial cleaning professional vacuuming a hotel corridor',
+    label: 'Hospitality & corridor maintenance',
+    service: 'Commercial & Janitorial Cleaning',
+    category: 'commercial',
+    span: 'tall',
+  },
+  {
+    image: svcRestoration,
+    alt: 'Placeholder: crew removing water-damaged drywall beside air movers',
+    label: 'Flood-cut & drywall removal support',
+    service: 'Restoration Support',
+    category: 'restoration',
+    span: 'standard',
+  },
+  {
+    image: svcContents,
+    alt: 'Placeholder: technician wrapping an armchair in moving blanket and stretch wrap',
+    label: 'Contents pack-out & wrapping',
+    service: 'Contents Processing & Cleaning',
+    category: 'contents',
+    span: 'standard',
+  },
+  {
+    image: galWarehouse,
+    alt: 'Placeholder: ride-on floor scrubber cleaning a long industrial warehouse aisle',
+    label: 'Industrial & warehouse floor care',
+    service: 'Commercial & Janitorial Cleaning',
+    category: 'commercial',
+    span: 'wide',
+  },
+  {
+    image: heroRemediation,
+    alt: 'Placeholder: technicians in coveralls working inside polyethylene remediation containment',
+    label: 'Contained remediation environment',
+    service: 'Asbestos Abatement & Mould Remediation',
+    category: 'remediation',
+    span: 'standard',
+  },
+  {
+    image: galEquipment,
+    alt: 'Placeholder: air movers and a portable dehumidifier positioned on concrete floor',
+    label: 'Structural drying & air movement setup',
+    service: 'Restoration Support',
+    category: 'restoration',
+    span: 'tall',
+  },
+  {
+    image: svcPostConstruction,
+    alt: 'Placeholder: worker removing protective film from new windows in a renovated space',
+    label: 'Window & finish detail cleaning',
+    service: 'Post-Construction Cleaning',
+    category: 'post-construction',
+    span: 'standard',
+  },
+  {
+    image: heroConstruction,
+    alt: 'Placeholder: crew sweeping and wiping frames in a newly built commercial space',
+    label: 'Final handover sweep & dust removal',
+    service: 'Post-Construction Cleaning',
+    category: 'post-construction',
+    span: 'wide',
+  },
+  {
+    image: svcCommercial,
+    alt: 'Placeholder: cleaner wiping down an office boardroom table after hours',
+    label: 'After-hours office & boardroom care',
+    service: 'Commercial & Janitorial Cleaning',
+    category: 'commercial',
+    span: 'standard',
+  },
+  {
+    image: galDemolition,
+    alt: 'Placeholder: worker loading interior demolition debris into a wheeled bin',
+    label: 'Demolition & site debris cleanup',
+    service: 'Remediation & Site Work',
+    category: 'remediation',
+    span: 'standard',
+  },
+  {
+    image: heroCommercial,
+    alt: 'Placeholder: floor scrubber operating in a modern office atrium at dusk',
+    label: 'Atrium & hard-surface maintenance',
+    service: 'Commercial & Janitorial Cleaning',
+    category: 'commercial',
+    span: 'wide',
+  },
+];
+---
+
+<BaseLayout
+  title="Projects & Gallery"
+  description="Visual overview of the restoration support, commercial cleaning, post-construction, contents processing, and remediation environments served by Quality General Services."
+  transparentHeader
+>
+  <PageHero
+    eyebrow="Projects / Gallery"
+    index="03"
+    title="In the field."
+    lede="A visual look at the environments and scopes our crews support across Calgary and surrounding areas."
+    image={galWarehouse}
+    imageAlt="Placeholder: industrial warehouse floor being scrubbed"
+  >
+    <p slot="meta" class="border-t border-white/15 pt-6 text-[0.875rem] leading-relaxed text-white/65" data-reveal="fade">
+      All photographs below are temporary placeholder images illustrating QGS service categories until official company
+      project photography is supplied.
+    </p>
+  </PageHero>
+
+  <!-- Filter bar -->
+  <section class="border-b border-rule bg-paper" aria-label="Filter gallery by service category">
+    <div class="container-x py-6">
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-3" role="tablist" data-gallery-filters>
+        {
+          filters.map((f, idx) => (
+            <button
+              type="button"
+              role="tab"
+              aria-selected={idx === 0 ? 'true' : 'false'}
+              data-filter={f.id}
+              class:list={[
+                'filter-btn relative py-2 text-[0.9375rem] font-medium transition-colors duration-300',
+                idx === 0 ? 'is-active text-ink' : 'text-ink-400 hover:text-ink',
+              ]}
+            >
+              {f.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial gallery -->
+  <section class="section-y bg-paper" aria-label="Gallery images">
+    <div class="container-x">
+      <div class="grid gap-x-8 gap-y-16 md:grid-cols-12 md:gap-y-24" data-gallery-grid>
+        {
+          items.map((item, i) => {
+            const colClass =
+              item.span === 'wide'
+                ? 'md:col-span-8'
+                : item.span === 'tall'
+                  ? 'md:col-span-4'
+                  : 'md:col-span-6';
+            const aspectClass =
+              item.span === 'wide'
+                ? 'aspect-[16/10]'
+                : item.span === 'tall'
+                  ? 'aspect-[3/4]'
+                  : 'aspect-[3/2]';
+            return (
+              <figure class={`gallery-card ${colClass}`} data-category={item.category}>
+                <div class="overflow-hidden bg-ink" data-reveal="image">
+                  <Image
+                    src={item.image}
+                    alt={item.alt}
+                    widths={[640, 960, 1264]}
+                    sizes="(min-width: 768px) 60vw, 100vw"
+                    class={`${aspectClass} w-full object-cover transition-transform duration-1000 ease-[var(--ease-cine)] hover:scale-[1.03]`}
+                    quality={72}
+                  />
+                </div>
+                <figcaption class="mt-4 flex items-baseline justify-between gap-4 border-t border-rule pt-4 text-[0.9375rem]">
+                  <div class="flex items-baseline gap-4">
+                    <span class="index-num text-ink-400">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="font-medium text-ink">{item.label}</span>
+                  </div>
+                  <span class="shrink-0 text-[0.8125rem] text-ink-400">{item.service}</span>
+                </figcaption>
+              </figure>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    eyebrow="Start a conversation"
+    title="Have a site that needs dependable support?"
+    body="Request a quote for restoration labour, commercial cleaning, post-construction cleanup, or specialized remediation."
+    primaryHref={ctas.quote.href}
+    primaryLabel={ctas.quote.label}
+    secondaryHref={ctas.services.href}
+    secondaryLabel={ctas.services.label}
+  />
+</BaseLayout>
+
+<style>
+  .filter-btn::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-signal);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease-cine);
+  }
+  .filter-btn.is-active::after {
+    transform: scaleX(1);
+  }
+</style>
+
+<script>
+  import { ScrollTrigger } from '@/scripts/motion';
+
+  const bar = document.querySelector<HTMLElement>('[data-gallery-filters]');
+  const grid = document.querySelector<HTMLElement>('[data-gallery-grid]');
+  if (bar && grid) {
+    const buttons = Array.from(bar.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('[data-category]'));
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.filter ?? 'all';
+        buttons.forEach((b) => {
+          const active = b === btn;
+          b.classList.toggle('is-active', active);
+          b.classList.toggle('text-ink', active);
+          b.classList.toggle('text-ink-400', !active);
+          b.setAttribute('aria-selected', String(active));
+        });
+        cards.forEach((card) => {
+          const match = target === 'all' || card.dataset.category === target;
+          card.hidden = !match;
+        });
+        ScrollTrigger.refresh();
+      });
+    });
+  }
+</script>

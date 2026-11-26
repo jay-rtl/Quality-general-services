@@ -1,0 +1,13 @@
+---
+/** Shared anti-spam fields: honeypot + render timestamp (validated server-side). */
+---
+
+<div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+  <label>
+    Leave this field empty
+    <input type="text" name="website" tabindex="-1" autocomplete="off" />
+  </label>
+</div>
+<input type="hidden" name="form_started_at" value="" data-started-at />
+<!-- Optional: CAPTCHA token (e.g. Cloudflare Turnstile) supplied by backend integration -->
+<input type="hidden" name="captcha_token" value="" data-captcha-token />

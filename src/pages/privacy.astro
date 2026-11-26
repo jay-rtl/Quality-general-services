@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import { site } from '@/config/site';
+---
+
+<BaseLayout
+  title="Privacy Notice"
+  description="How Quality General Services handles personal information submitted through business inquiry, quote, and employment application forms."
+  transparentHeader
+>
+  <PageHero
+    eyebrow="Legal"
+    title="Privacy Notice"
+    lede={`How ${site.name} (${site.shortName}) collects, uses, and protects information submitted through this website.`}
+  />
+
+  <section class="section-y bg-paper">
+    <div class="container-x">
+      <div class="grid lg:grid-cols-12">
+        <article class="prose-qgs space-y-12 lg:col-span-8">
+          <div>
+            <h2 class="display-sm">1. Information we collect</h2>
+            <p class="mt-4 text-ink-500">
+              We collect only the information you choose to provide when you submit a quote request, general inquiry, or
+              online employment application. For business inquiries, this may include your name, company name, email
+              address, phone number, project location, and project details. For employment applications, this may include
+              your contact information, availability, work eligibility, experience summary, résumé, and any supporting
+              documents you upload.
+            </p>
+          </div>
+
+          <div class="border-t border-rule pt-10">
+            <h2 class="display-sm">2. How we use your information</h2>
+            <p class="mt-4 text-ink-500">
+              Business inquiry details are used solely to review your request, prepare quotations, schedule
+              consultations, and communicate with you regarding our services. Employment application details and uploaded
+              files are used solely to evaluate your qualifications and contact you regarding job opportunities with
+              {site.name}. We do not sell or rent your personal information to third parties.
+            </p>
+          </div>
+
+          <div class="border-t border-rule pt-10">
+            <h2 class="display-sm">3. Uploaded documents &amp; security</h2>
+            <p class="mt-4 text-ink-500">
+              Files uploaded through the Careers application form (such as résumés and safety certificates) are restricted
+              to approved document formats and file size limits, and are transmitted securely to our team for recruitment
+              review. Please do not include sensitive financial details or government identification numbers (such as SIN
+              or banking details) in online form submissions.
+            </p>
+          </div>
+
+          <div class="border-t border-rule pt-10">
+            <h2 class="display-sm">4. Retention &amp; access requests</h2>
+            <p class="mt-4 text-ink-500">
+              We retain submitted information only for as long as reasonably necessary to respond to your inquiry, manage
+              potential service contracts, or consider your employment application. You may request access to, correction
+              of, or deletion of your submitted information at any time by contacting us directly.
+            </p>
+          </div>
+
+          <div class="border-t border-rule pt-10">
+            <h2 class="display-sm">5. Contact us</h2>
+            <p class="mt-4 text-ink-500">
+              If you have questions about this Privacy Notice or how your information is handled, please contact
+              {site.name}:
+            </p>
+            <address class="mt-6 not-italic text-ink">
+              <p>{site.name}</p>
+              <p>{site.contact.address.street}, {site.contact.address.city}, {site.contact.address.region}</p>
+              <p class="mt-2">
+                <a href={`mailto:${site.contact.email}`} class="link-line">{site.contact.email}</a> ·
+                <a href={site.contact.phoneHref} class="link-line">{site.contact.phoneDisplay}</a>
+              </p>
+            </address>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

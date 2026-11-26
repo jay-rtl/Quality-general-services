@@ -1,0 +1,229 @@
+---
+import Logo from '@/components/ui/Logo.astro';
+import { primaryNav, ctas } from '@/data/navigation';
+import { site } from '@/config/site';
+import { withoutBase } from '@/config/build';
+
+interface Props {
+  transparent?: boolean;
+}
+const { transparent = false } = Astro.props;
+const path = withoutBase(Astro.url.pathname).replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`));
+---
+
+<header
+  id="site-header"
+  data-transparent={transparent ? 'true' : 'false'}
+  data-state={transparent ? 'top' : 'solid'}
+  class="site-header fixed inset-x-0 top-0 z-50 text-white"
+>
+  <div class="header-bg absolute inset-0 bg-ink" aria-hidden="true"></div>
+  <div class="container-x relative flex h-[var(--header-h)] items-center justify-between gap-8">
+    <a href="/" class="relative z-10 shrink-0" aria-label="Quality General Services — Home">
+      <Logo width={196} class="w-[164px] md:w-[196px]" />
+    </a>
+
+    <nav aria-label="Primary" class="hidden lg:block">
+      <ul class="flex items-center gap-10 text-[0.9375rem]">
+        {
+          primaryNav.map((item) =>
+            item.children ? (
+              <li class="nav-dropdown relative" data-dropdown>
+                <div class="flex items-center gap-1.5">
+                  <a
+                    href={item.href}
+                    class:list={['nav-link py-2', isActive(item.href) && 'is-active']}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                  <button
+                    type="button"
+                    class="grid size-6 place-items-center text-white/70 hover:text-white"
+                    aria-expanded="false"
+                    aria-controls="services-menu"
+                    aria-label="Show services"
+                    data-dropdown-toggle
+                  >
+                    <svg class="size-2.5 transition-transform duration-300" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4">
+                      <path d="M1 1l4 4 4-4" />
+                    </svg>
+                  </button>
+                </div>
+                <div id="services-menu" class="dropdown-panel absolute left-1/2 top-full w-[26rem] -translate-x-1/2 pt-5" data-dropdown-panel>
+                  <ul class="bg-ink px-8 py-6 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.6)]">
+                    {item.children.map((c) => (
+                      <li class="border-b border-white/10 last:border-0">
+                        <a href={c.href} class="group/dd flex items-baseline gap-5 py-3.5 text-white/80 transition-colors hover:text-white">
+                          <span class="index-num text-white/40 transition-colors group-hover/dd:text-brand">{c.index}</span>
+                          <span>{c.label}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={['nav-link py-2', isActive(item.href) && 'is-active']}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <a
+        href={ctas.quote.href}
+        class="hidden h-11 items-center bg-signal px-5 text-[0.875rem] font-medium transition-colors duration-500 hover:bg-signal-dark sm:inline-flex"
+      >
+        {ctas.quote.label}
+      </a>
+      <button
+        type="button"
+        class="menu-toggle relative z-10 -mr-2 flex h-11 items-center gap-3 px-2 lg:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-toggle
+      >
+        <span class="text-[0.8125rem] font-medium uppercase tracking-[0.16em]" data-menu-label>Menu</span>
+        <span class="relative block h-3 w-6" aria-hidden="true">
+          <span class="menu-bar absolute left-0 top-0 h-px w-full bg-current"></span>
+          <span class="menu-bar absolute bottom-0 left-0 h-px w-full bg-current"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="mobile-menu fixed inset-0 z-0 flex flex-col overflow-y-auto bg-ink pt-[var(--header-h)] lg:hidden"
+    hidden
+    data-mobile-menu
+  >
+    <nav aria-label="Mobile" class="container-x flex flex-1 flex-col justify-between pb-10 pt-8">
+      <ul class="space-y-1">
+        {
+          primaryNav.map((item, i) => (
+            <li class="mm-item border-b border-white/10">
+              <a href={item.href} class="flex items-baseline justify-between py-4 text-[2rem] font-semibold tracking-[-0.03em]">
+                <span>{item.label}</span>
+                <span class="index-num text-white/35">{String(i + 1).padStart(2, '0')}</span>
+              </a>
+              {item.children && (
+                <ul class="-mt-1 grid gap-2.5 pb-5 text-[0.9375rem] text-white/65">
+                  {item.children.map((c) => (
+                    <li>
+                      <a href={c.href} class="hover:text-white">
+                        {c.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mm-item mt-10 space-y-6">
+        <a href={ctas.quote.href} class="flex h-14 items-center justify-between bg-signal px-6 font-medium">
+          {ctas.quote.label}
+          <svg class="h-3 w-5" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M0 6h18M13 1l5 5-5 5" /></svg>
+        </a>
+        <div class="grid gap-1 text-[0.9375rem] text-white/65">
+          <a href={site.contact.phoneHref} class="hover:text-white">{site.contact.phoneDisplay}</a>
+          <a href={`mailto:${site.contact.email}`} class="break-all hover:text-white">{site.contact.email}</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header-bg {
+    transition: opacity 0.6s var(--ease-cine);
+  }
+  .site-header[data-state='top']:not([data-menu='true']) .header-bg {
+    opacity: 0;
+  }
+  .site-header {
+    transition: transform 0.6s var(--ease-cine);
+  }
+  .site-header[data-hidden='true'] {
+    transform: translateY(-100%);
+  }
+  .site-header[data-state='top']::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  .nav-link {
+    position: relative;
+    color: rgb(255 255 255 / 0.82);
+    transition: color 0.3s;
+  }
+  .nav-link:hover,
+  .nav-link.is-active {
+    color: #fff;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-brand);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s var(--ease-cine);
+  }
+  .nav-link:hover::after,
+  .nav-link.is-active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .dropdown-panel {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 8px);
+    transition:
+      opacity 0.35s var(--ease-cine),
+      transform 0.35s var(--ease-cine),
+      visibility 0.35s;
+  }
+  .nav-dropdown:hover .dropdown-panel,
+  .nav-dropdown:focus-within .dropdown-panel,
+  .nav-dropdown[data-open='true'] .dropdown-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+  .nav-dropdown[data-open='true'] [data-dropdown-toggle] svg {
+    transform: rotate(180deg);
+  }
+
+  .menu-bar {
+    transition: transform 0.45s var(--ease-cine);
+  }
+  .menu-toggle[aria-expanded='true'] .menu-bar:first-child {
+    transform: translateY(5.5px) rotate(45deg);
+  }
+  .menu-toggle[aria-expanded='true'] .menu-bar:last-child {
+    transform: translateY(-5.5px) rotate(-45deg);
+  }
+</style>

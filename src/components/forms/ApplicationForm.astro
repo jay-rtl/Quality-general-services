@@ -1,0 +1,119 @@
+---
+import Field from './Field.astro';
+import FileUpload from './FileUpload.astro';
+import SpamGuard from './SpamGuard.astro';
+import FormStatus from './FormStatus.astro';
+import Button from '@/components/ui/Button.astro';
+import { isPreview } from '@/config/build';
+import DemoNotice from './DemoNotice.astro';
+
+const roles = [
+  { value: 'restoration-labourer', label: 'Restoration Support / Labourer' },
+  { value: 'contents-technician', label: 'Contents Processing & Cleaning Technician' },
+  { value: 'commercial-cleaner', label: 'Commercial & Janitorial Cleaner' },
+  { value: 'post-construction-cleaner', label: 'Post-Construction Cleaner' },
+  { value: 'remediation-worker', label: 'Asbestos Abatement / Mould Remediation Worker' },
+  { value: 'general-labour', label: 'Project-Based / General Labour' },
+  { value: 'other', label: 'Other / General Application' },
+];
+
+const availability = [
+  { value: 'immediate', label: 'Immediately' },
+  { value: 'within-2-weeks', label: 'Within 2 weeks' },
+  { value: 'within-month', label: 'Within a month' },
+  { value: 'flexible', label: 'Flexible / project-based' },
+];
+
+const schedules = [
+  { value: 'full-time', label: 'Full-time' },
+  { value: 'part-time', label: 'Part-time' },
+  { value: 'on-call', label: 'On-call / project-based' },
+  { value: 'any', label: 'Open to any schedule' },
+];
+---
+
+<form id="application-form" class="relative" novalidate data-form="application" aria-describedby="app-privacy">
+  <DemoNotice />
+  <div class="grid gap-x-10 gap-y-6 md:grid-cols-2">
+    <Field name="full_name" label="Full name" required autocomplete="name" maxlength={120} />
+    <Field name="email" label="Email" type="email" required autocomplete="email" maxlength={200} />
+    <Field name="phone" label="Phone" type="tel" required autocomplete="tel" maxlength={30} pattern="[0-9+()\-.\s]{7,30}" />
+    <Field name="city" label="City / area" required autocomplete="address-level2" maxlength={120} />
+    <Field name="position" label="Area of interest" type="select" required options={roles} class="md:col-span-2" />
+    <Field name="availability" label="Availability to start" type="select" required options={availability} />
+    <Field name="schedule" label="Preferred work type" type="select" required options={schedules} />
+    <Field
+      name="work_eligibility"
+      label="Authorized to work in Canada"
+      type="select"
+      required
+      options={[
+        { value: 'yes', label: 'Yes' },
+        { value: 'no', label: 'No' },
+      ]}
+    />
+    <Field
+      name="drivers_licence"
+      label="Valid Alberta driver's licence"
+      type="select"
+      options={[
+        { value: 'yes', label: 'Yes' },
+        { value: 'no', label: 'No' },
+      ]}
+    />
+    <Field
+      name="experience"
+      label="Relevant experience & safety training"
+      type="textarea"
+      required
+      rows={5}
+      maxlength={4000}
+      hint="Briefly describe your hands-on experience in restoration, cleaning, construction, or site work, plus any current safety tickets."
+      class="md:col-span-2"
+    />
+  </div>
+
+  <div class="mt-10 grid gap-8 border-t border-rule pt-10">
+    <FileUpload
+      name="resume"
+      label="Résumé / CV"
+      required
+      accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      extensions="pdf,doc,docx"
+      hint="PDF, DOC, or DOCX · Maximum 5 MB."
+    />
+    <FileUpload
+      name="supporting_documents"
+      label="Supporting documents (safety tickets, certificates, cover letter)"
+      multiple
+      maxFiles={4}
+      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+      extensions="pdf,doc,docx,jpg,jpeg,png"
+      hint="Up to 4 files · PDF, DOC, DOCX, JPG, or PNG · 5 MB per file (15 MB total across all uploads)."
+    />
+  </div>
+
+  <SpamGuard />
+
+  <div class="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+    <label class="consent flex max-w-[32rem] cursor-pointer items-start gap-4 text-[0.875rem] text-ink-500" data-field>
+      <input type="checkbox" name="privacy_consent" value="yes" required class="mt-0.5 size-4 shrink-0 accent-[var(--color-signal)]" />
+      <span id="app-privacy">
+        I confirm the information provided is accurate and agree that QGS may review my application and attached
+        documents for recruitment purposes, as described in the
+        <a href="/privacy" class="text-ink underline underline-offset-4">Privacy Notice</a>.
+        <span class="field-error mt-2 hidden text-signal" aria-live="polite"></span>
+      </span>
+    </label>
+    <Button type={isPreview ? 'button' : 'submit'} variant="primary" class="shrink-0 md:min-w-[15rem]" data-submit>
+      <span data-submit-label>Submit Application</span>
+    </Button>
+  </div>
+
+  <FormStatus />
+</form>
+
+<script>
+  import { bindForms } from '@/scripts/forms';
+  bindForms();
+</script>

@@ -1,0 +1,22 @@
+---
+interface Props {
+  class?: string;
+  /** Rendered width in px of the full lockup; height follows the original ratio. */
+  width?: number;
+  eager?: boolean;
+}
+const { class: className = '', width = 200, eager = true } = Astro.props;
+// Original artwork ratio (358.48 x 71.29) — never stretch.
+const height = Math.round((width * 71.29) / 358.48);
+---
+
+<img
+  src="/brand/qgs-logo.svg"
+  alt="Quality General Services"
+  width={width}
+  height={height}
+  class={`block h-auto select-none ${className}`}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding="async"
+  draggable="false"
+/>

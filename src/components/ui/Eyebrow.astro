@@ -1,0 +1,17 @@
+---
+interface Props {
+  index?: string;
+  class?: string;
+  tone?: 'dark' | 'light';
+}
+const { index, class: className = '', tone = 'dark' } = Astro.props;
+---
+
+<p
+  class={`eyebrow flex items-center gap-3 ${tone === 'light' ? 'text-white/70' : 'text-ink-500'} ${className}`}
+  data-reveal="fade"
+>
+  <span class="inline-block size-1.5 rounded-full bg-brand" aria-hidden="true"></span>
+  {index && <span class={tone === 'light' ? 'text-white' : 'text-ink'}>{index}</span>}
+  <span><slot /></span>
+</p>

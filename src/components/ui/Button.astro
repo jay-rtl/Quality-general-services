@@ -1,0 +1,57 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'outline-light' | 'outline-dark' | 'text-light' | 'text-dark';
+
+type Props = {
+  href?: string;
+  variant?: Variant;
+  type?: 'button' | 'submit';
+  class?: string;
+  arrow?: boolean;
+} & Omit<HTMLAttributes<'a'>, 'type'>;
+
+const { href, variant = 'primary', type = 'button', class: className = '', arrow = true, ...rest } = Astro.props;
+
+const base =
+  'group/btn relative inline-flex items-center justify-between gap-6 text-[0.9375rem] font-medium tracking-[-0.005em] transition-[background-color,color,border-color] duration-500 ease-[var(--ease-cine)] focus-visible:outline-offset-4';
+
+const variants: Record<Variant, string> = {
+  primary: 'h-14 pl-6 pr-5 bg-signal text-white hover:bg-signal-dark',
+  'outline-light': 'h-14 pl-6 pr-5 border border-white/35 text-white hover:border-white hover:bg-white hover:text-ink',
+  'outline-dark': 'h-14 pl-6 pr-5 border border-ink/25 text-ink hover:border-ink hover:bg-ink hover:text-white',
+  'text-light': 'py-2 text-white',
+  'text-dark': 'py-2 text-ink',
+};
+
+const cls = `${base} ${variants[variant]} ${className}`;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag href={href} type={href ? undefined : type} class={cls} {...rest}>
+  <span class={variant.startsWith('text') ? 'link-line' : ''}><slot /></span>
+  {
+    arrow && (
+      <span class="relative block h-3 w-5 overflow-hidden" aria-hidden="true">
+        <svg
+          class="absolute inset-0 h-3 w-5 transition-transform duration-500 ease-[var(--ease-cine)] group-hover/btn:translate-x-full"
+          viewBox="0 0 20 12"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <path d="M0 6h18M13 1l5 5-5 5" />
+        </svg>
+        <svg
+          class="absolute inset-0 h-3 w-5 -translate-x-full transition-transform duration-500 ease-[var(--ease-cine)] group-hover/btn:translate-x-0"
+          viewBox="0 0 20 12"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <path d="M0 6h18M13 1l5 5-5 5" />
+        </svg>
+      </span>
+    )
+  }
+</Tag>

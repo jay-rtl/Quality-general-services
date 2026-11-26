@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import Button from '@/components/ui/Button.astro';
+import ApplicationForm from '@/components/forms/ApplicationForm.astro';
+import { site } from '@/config/site';
+
+import heroImg from '@/assets/images/placeholder/gallery-demolition.jpg';
+import crewImg from '@/assets/images/placeholder/service-postconstruction.jpg';
+
+const areas = [
+  {
+    index: '01',
+    title: 'Restoration Support & General Labour',
+    summary: 'Water and fire damage restoration assistance, demolition and site cleanup, contents handling, and reconstruction support.',
+  },
+  {
+    index: '02',
+    title: 'Contents Processing & Cleaning',
+    summary: 'Pack-out and pack-back crews, furniture wrapping and handling, inventory assistance, and household contents cleaning.',
+  },
+  {
+    index: '03',
+    title: 'Commercial & Post-Construction Cleaning',
+    summary: 'Office and facility janitorial teams, deep cleaning, and detailed handover cleaning for newly built or renovated spaces.',
+  },
+  {
+    index: '04',
+    title: 'Specialized Remediation Crew',
+    summary: 'Asbestos abatement and mould remediation personnel working under applicable training, certification, and safety procedures.',
+  },
+];
+
+const expectations = [
+  'Reliability, punctuality, and pride in hands-on workmanship',
+  'Respect for site safety procedures, PPE, and client property',
+  'Clear communication with site leads, contractors, and teammates',
+  'Willingness to work on project-based or scheduled shifts across Calgary',
+];
+---
+
+<BaseLayout
+  title="Careers & Job Opportunities"
+  description="Apply to join Quality General Services in Calgary. Submit your online employment application and upload your résumé and supporting documents."
+  transparentHeader
+>
+  <PageHero
+    eyebrow="Careers"
+    index="04"
+    title="Work with a crew that values the craft."
+    lede={`We recruit dependable, safety-minded workers for restoration support, commercial cleaning, remediation, and project-based roles across ${site.serviceArea}.`}
+    image={heroImg}
+    imageAlt="Placeholder: worker loading debris on an interior cleanup site"
+  >
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4" data-reveal="fade">
+      <Button href="#apply" variant="primary">Apply Now</Button>
+      <Button href="#opportunities" variant="outline-light">Explore areas of work</Button>
+    </div>
+  </PageHero>
+
+  <!-- Areas of work -->
+  <section id="opportunities" class="section-y bg-paper" aria-labelledby="opp-heading">
+    <div class="container-x">
+      <div class="grid gap-y-12 lg:grid-cols-12 lg:gap-x-10">
+        <div class="lg:col-span-4">
+          <Eyebrow index="01">Opportunities</Eyebrow>
+          <h2 id="opp-heading" class="display-md mt-8 max-w-[14ch]" data-reveal="lines">
+            Where we hire.
+          </h2>
+          <p class="mt-6 text-ink-500" data-reveal="fade">
+            We accept ongoing applications for both full-time, part-time, and project-based positions. Submit your details
+            below and our team will contact you when a role matches your background.
+          </p>
+        </div>
+
+        <ol class="lg:col-span-7 lg:col-start-6">
+          {
+            areas.map((a) => (
+              <li class="grid gap-4 border-t border-rule py-9 md:grid-cols-12 md:gap-8" data-reveal="fade">
+                <span class="index-num text-ink-400 md:col-span-2">{a.index}</span>
+                <div class="md:col-span-10">
+                  <h3 class="display-sm">{a.title}</h3>
+                  <p class="mt-4 max-w-[34rem] text-ink-500">{a.summary}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we look for -->
+  <section class="section-y border-t border-rule bg-bone" aria-labelledby="expect-heading">
+    <div class="container-x">
+      <div class="grid items-center gap-y-12 lg:grid-cols-12 lg:gap-x-12">
+        <figure class="lg:col-span-6" data-reveal="image" data-from="left">
+          <Image
+            src={crewImg}
+            alt="Placeholder: worker cleaning windows on a renovated commercial job site"
+            widths={[640, 960, 1264]}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            class="aspect-[3/2] w-full object-cover"
+            quality={72}
+          />
+          <figcaption class="mt-3 flex justify-between text-[0.8125rem] text-ink-400">
+            <span>Safe, structured working environments</span>
+            <span>Placeholder image</span>
+          </figcaption>
+        </figure>
+
+        <div class="lg:col-span-6">
+          <Eyebrow index="02">What we look for</Eyebrow>
+          <h2 id="expect-heading" class="display-md mt-8 max-w-[16ch]" data-reveal="lines">
+            Practical, dependable people.
+          </h2>
+          <p class="mt-6 max-w-[34rem] text-ink-500" data-reveal="fade">
+            Our mission includes maintaining safe working environments and building strong, lasting relationships with
+            our employees as well as our clients.
+          </p>
+          <ul class="mt-8 border-t border-ink/12" data-stagger>
+            {
+              expectations.map((item) => (
+                <li class="flex items-start gap-4 border-b border-ink/12 py-4 text-[1.0625rem] text-ink">
+                  <span class="mt-2.5 size-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                  <span>{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Online Application Form -->
+  <section id="apply" class="section-y bg-paper" aria-labelledby="apply-heading">
+    <div class="container-x">
+      <div class="grid gap-y-16 lg:grid-cols-12 lg:gap-x-10">
+        <div class="lg:col-span-4">
+          <div class="lg:sticky lg:top-[calc(var(--header-h)+3rem)]">
+            <Eyebrow index="03">Online application</Eyebrow>
+            <h2 id="apply-heading" class="display-md mt-8" data-reveal="lines">Apply now.</h2>
+            <p class="mt-6 max-w-[24rem] text-ink-500" data-reveal="fade">
+              Complete the form and attach your résumé. You can also include relevant safety tickets or supporting
+              documents.
+            </p>
+            <div class="mt-10 border-t border-rule pt-8 text-[0.875rem] text-ink-500" data-reveal="fade">
+              <p class="font-medium text-ink">Questions about applying?</p>
+              <p class="mt-2">
+                Reach us at <a href={`mailto:${site.contact.email}`} class="link-line break-all text-ink">{site.contact.email}</a>
+                or <a href={site.contact.phoneHref} class="link-line text-ink">{site.contact.phoneDisplay}</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 lg:col-start-6" data-reveal="fade">
+          <ApplicationForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

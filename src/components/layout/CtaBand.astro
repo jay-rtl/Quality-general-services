@@ -1,0 +1,47 @@
+---
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import Button from '@/components/ui/Button.astro';
+import { ctas } from '@/data/navigation';
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+  tone?: 'bone' | 'ink';
+}
+
+const {
+  eyebrow = 'Next step',
+  title = 'Ready to discuss your project?',
+  body = 'Tell us about your site, timeline and scope. Our team serves Calgary and surrounding areas.',
+  primaryHref = ctas.quote.href,
+  primaryLabel = ctas.quote.label,
+  secondaryHref = ctas.contact.href,
+  secondaryLabel = ctas.contact.label,
+  tone = 'bone',
+} = Astro.props;
+
+const dark = tone === 'ink';
+---
+
+<section class:list={['section-y', dark ? 'bg-ink text-white' : 'border-t border-rule bg-bone text-ink']}>
+  <div class="container-x">
+    <div class="grid items-end gap-y-12 lg:grid-cols-12 lg:gap-x-10">
+      <div class="lg:col-span-7">
+        <Eyebrow tone={dark ? 'light' : 'dark'}>{eyebrow}</Eyebrow>
+        <h2 class="display-md mt-8 max-w-[18ch]" data-reveal="lines">{title}</h2>
+      </div>
+      <div class="lg:col-span-5">
+        <p class:list={['lede', dark ? 'text-white/70' : 'text-ink-500']} data-reveal="fade">{body}</p>
+        <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4" data-reveal="fade">
+          <Button href={primaryHref} variant="primary">{primaryLabel}</Button>
+          <Button href={secondaryHref} variant={dark ? 'outline-light' : 'outline-dark'}>{secondaryLabel}</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
