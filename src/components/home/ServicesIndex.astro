@@ -31,10 +31,11 @@ import { services, serviceHref } from '@/data/services';
                   <Image
                     src={s.image}
                     alt=""
-                    widths={[640, 960, 1264]}
-                    sizes="40vw"
+                    widths={[480, 768]}
+                    sizes="(min-width: 1024px) 40vw, 100vw"
                     class="h-full w-full object-cover"
-                    quality={72}
+                    style={`object-position: ${s.imagePosition ?? '50% 35%'}`}
+                    quality={80}
                     loading={i < 2 ? 'eager' : 'lazy'}
                   />
                 </div>
@@ -48,7 +49,7 @@ import { services, serviceHref } from '@/data/services';
                 <span data-svc-count>01</span>
                 <span class="text-white/55"> / 06</span>
               </span>
-              <span class="text-[0.75rem] uppercase tracking-[0.18em] text-white/65">Placeholder image</span>
+              <span class="text-[0.75rem] uppercase tracking-[0.18em] text-white/65">QGS field operations</span>
             </div>
           </div>
         </div>
@@ -60,7 +61,16 @@ import { services, serviceHref } from '@/data/services';
           services.map((s, i) => (
             <li class="svc-item border-t border-rule py-14 first:border-t-0 first:pt-0 md:py-20 lg:min-h-[78vh] lg:py-24 lg:first:pt-0" data-svc-item={i}>
               <figure class="mb-10 overflow-hidden lg:hidden" data-reveal="image">
-                <Image src={s.image} alt={s.imageAlt} widths={[480, 768, 1264]} sizes="100vw" class="aspect-[3/2] w-full object-cover" quality={70} />
+                <Image
+                  src={s.image}
+                  alt={s.imageAlt}
+                  widths={[480, 768]}
+                  sizes="100vw"
+                  class="aspect-[4/5] max-h-[540px] w-full object-cover"
+                  style={`object-position: ${s.imagePosition ?? '50% 35%'}`}
+                  quality={80}
+                  loading="lazy"
+                />
               </figure>
               <div class="flex items-baseline gap-6 md:gap-10">
                 <span class="index-num svc-index pt-2 text-ink-400 transition-colors duration-500">{s.index}</span>

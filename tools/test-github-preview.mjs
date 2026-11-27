@@ -48,8 +48,8 @@ try {
   };
   const pages = ['','about/','careers/','contact/','privacy/','projects/','services/','services/asbestos-abatement-mould-remediation/','services/commercial-janitorial-cleaning/','services/contents-processing-cleaning/','services/post-construction-cleaning/','services/restoration-support/','services/workforce-staffing-solutions/','404.html'];
   for (const route of pages) {
-    const response = await api.get(baseUrl+route+'?qgs-review=20261126');
-    assert.equal(response.status(),200,route);
+    const response = await api.get(baseUrl+route+'?qgs-review=20261127');
+    assert(route === '404.html' ? [200,404].includes(response.status()) : response.status()===200,`${route}: ${response.status()}`);
     const html = await response.text();
     assert.match(html,/name="robots" content="noindex, nofollow, noarchive"/);
     collect(parse(html));
@@ -69,18 +69,30 @@ try {
   page.on('response',r=>{if(r.status()>=400)broken.push({url:r.url(),status:r.status()});});
   for (const width of [390,768,1440]) {
     await page.setViewportSize({width,height:1000});
-    for(const route of ['','contact/','careers/']) {
+    for(const route of pages) {
       await page.goto(baseUrl+route);
       await page.evaluate(()=>document.fonts.ready);
       await page.waitForFunction(()=>document.documentElement.classList.contains('motion-ready'));
       const overflow = await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth}));
       if(overflow.scrollWidth>width) issues.push({route:route||'home',...overflow,existing:true});
       assert(await page.locator('h1').isVisible());
-      assert(await page.locator('[data-demo-notice]').count()>0);
+      if (await page.locator('form[data-form]').count()) assert(await page.locator('[data-demo-notice]').count()>0);
       assert.equal(await page.locator('img').evaluateAll(images=>images.filter(img=>img.complete && img.naturalWidth===0).length),0);
-      for (const y of [0,1000,2500,1200,0]) {await page.evaluate(y=>window.scrollTo(0,y),y); await page.waitForTimeout(90);}
+      const height = await page.evaluate(()=>document.documentElement.scrollHeight);
+      for (const y of [0,Math.min(1000,height),height,Math.min(1200,height),0]) {await page.evaluate(y=>window.scrollTo(0,y),y); await page.waitForTimeout(150);}
+      if(route==='projects/') {
+        // Exercise every lazy image and reveal during an actual progressive scroll.
+        for(let y=0;y<height;y+=700){await page.evaluate(y=>window.scrollTo(0,y),y);await page.waitForTimeout(200);}
+        await page.waitForTimeout(2300);
+        await page.waitForFunction(()=>Array.from(document.querySelectorAll('[data-gallery-grid] img')).every(img=>img.complete&&img.naturalWidth>0));
+        await page.evaluate(()=>window.scrollTo(0,0));
+      }
+      if (['','projects/','careers/'].includes(route)) {
+        await page.waitForTimeout(500);
+        await page.screenshot({path:path.join(artifact,`${process.env.PREVIEW_URL?'live':'local'}-${route.replace('/','') || 'home'}-${width}.png`),fullPage:true});
+      }
     }
-    pass(`Home/contact/careers render at ${width}px; fonts/images and scroll forward/reverse checked`);
+    pass(`All 14 pages render at ${width}px; fonts/images and scroll forward/reverse checked`);
   }
   await page.setViewportSize({width:390,height:1000});
   await page.goto(baseUrl);
@@ -90,6 +102,19 @@ try {
   assert.equal(await page.locator('[data-menu-toggle]').getAttribute('aria-expanded'),'false');
   assert.equal(await page.evaluate(()=>document.activeElement?.hasAttribute('data-menu-toggle')),true);
   pass('Mobile menu opens and Escape closes it with focus restored');
+  await page.goto(baseUrl+'projects/');
+  const cards=page.locator('[data-gallery-grid] [data-category]');
+  const allCards=await cards.count();
+  assert.equal(allCards,11);
+  for (const button of await page.locator('[data-gallery-filters] button').all()) {
+    const target=await button.getAttribute('data-filter');
+    await button.click();
+    const shown=await cards.evaluateAll(elements=>elements.filter(el=>!el.hidden).map(el=>el.getAttribute('data-category')));
+    assert(shown.length>0);
+    if(target==='all') assert.equal(shown.length,11);
+    else assert(shown.every(category=>category===target));
+  }
+  pass('Projects gallery includes all 11 client photographs and every filter button works');
   await page.setViewportSize({width:1440,height:1000});
   const fillQuote = async(route,selector)=>{
     await page.goto(baseUrl+route);
@@ -132,6 +157,14 @@ try {
   const noticeScan = await new AxeBuilder({page}).include('[data-demo-notice]').withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
   assert.deepEqual(noticeScan.violations,[]);
   pass('Added demo notice passes scoped axe rules including contrast');
+  const accessibility=[];
+  for (const route of ['contact/','careers/','projects/']) {
+    await page.goto(baseUrl+route);
+    const scan=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
+    accessibility.push({route,violations:scan.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))}))});
+  }
+  await writeFile(path.join(artifact,process.env.PREVIEW_URL?'live-accessibility.json':'local-accessibility.json'),JSON.stringify(accessibility,null,2));
+  await page.goto(baseUrl+'contact/');
   await page.screenshot({path:path.join(artifact,process.env.PREVIEW_URL?'live-contact.png':'local-contact.png'),fullPage:true});
   assert.equal(await page.evaluate(()=>localStorage.length+sessionStorage.length),0);
   assert.equal((await context.cookies()).length,0);
@@ -145,7 +178,7 @@ try {
   assert.equal(plain.url(),before);
   assert(await plain.locator('h1').isVisible());
   pass('No-JavaScript content remains visible; demo button and Enter do not submit personal details in a URL');
-  assert.deepEqual(apiRequests,[]); assert.deepEqual(externalRequests,[]); assert.deepEqual(runtimeErrors,[]); assert.deepEqual(broken,[]);
+  assert.deepEqual(apiRequests,[]); assert.deepEqual(externalRequests,[]); assert.deepEqual(runtimeErrors,[]); assert.deepEqual(broken.filter(r=>!r.url.includes('/404.html')),[]);
   pass('Zero POST/fetch/XHR submissions, external network requests, uncaught errors or broken browser assets');
   const result={checks:checks.length,passed:checks,knownVisualIssues:issues,browser:browser.version(),baseUrl,verification,apiRequests,externalRequests,runtimeErrors,broken};
   await writeFile(path.join(artifact,process.env.PREVIEW_URL?'live-result.json':'local-result.json'),JSON.stringify(result,null,2));

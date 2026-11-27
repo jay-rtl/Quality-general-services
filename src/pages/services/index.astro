@@ -59,24 +59,26 @@ import heroImg from '@/assets/images/placeholder/hero-restoration.jpg';
           <article id={s.slug} class="section-y border-b border-rule last:border-b-0">
             <div class="container-x">
               <div class="grid items-center gap-y-12 lg:grid-cols-12 lg:gap-x-12">
-                <figure class:list={['lg:col-span-6', flip && 'lg:order-2']} data-reveal="image" data-from={flip ? 'right' : 'left'}>
+                <figure class:list={['lg:col-span-5', flip ? 'lg:order-2 lg:col-start-8' : 'lg:col-start-1']} data-reveal="image" data-from={flip ? 'right' : 'left'}>
                   <a href={serviceHref(s)} class="group block overflow-hidden bg-ink">
                     <Image
                       src={s.image}
                       alt={s.imageAlt}
-                      widths={[640, 960, 1264]}
-                      sizes="(min-width: 1024px) 50vw, 100vw"
-                      class="aspect-[3/2] w-full object-cover transition-transform duration-1000 ease-[var(--ease-cine)] group-hover:scale-[1.04]"
-                      quality={72}
+                      widths={[480, 768]}
+                      sizes="(min-width: 1024px) 42vw, 100vw"
+                      class="aspect-[4/5] max-h-[620px] w-full object-cover transition-transform duration-1000 ease-[var(--ease-cine)] group-hover:scale-[1.04]"
+                      style={`object-position: ${s.imagePosition ?? '50% 35%'}`}
+                      quality={80}
+                      loading="lazy"
                     />
                   </a>
                   <figcaption class="mt-3 flex justify-between text-[0.8125rem] text-ink-400">
                     <span>{s.navTitle}</span>
-                    <span>Placeholder image</span>
+                    <span>QGS field operations</span>
                   </figcaption>
                 </figure>
 
-                <div class:list={['lg:col-span-6', flip && 'lg:order-1']}>
+                <div class:list={['lg:col-span-6', flip ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-7']}>
                   <Eyebrow index={s.index}>{s.navTitle}</Eyebrow>
                   <h2 class="display-md mt-6 max-w-[18ch]" data-reveal="lines">
                     <a href={serviceHref(s)} class="transition-colors duration-500 hover:text-signal">

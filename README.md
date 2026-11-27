@@ -29,6 +29,6 @@ The workspace's normal `npm run build` still targets `dist/`, root `/`, the prod
 
 ## Known inherited findings
 
-The approved visuals/GSAP were preserved. The earlier backend audit found transient Careers reveal-image overflow at 390/768 px and existing form-label/upload-hint contrast issues. They remain disclosed under the visual freeze. Placeholder photography/OG imagery and service-copy confirmations remain the client's content decisions. This preview is for approval and is not a declaration that the production site is launch-ready.
+The current approved visuals/GSAP and all 11 optimized client photographs are preserved. Original client photographs stay outside the repository and deployment. Existing placeholder hero/section and OG imagery are retained where used by the approved frontend. The earlier audit found transient Careers reveal-image overflow at 390/768 px and form-label/upload-hint contrast issues; current checks record these separately. This preview is for client review and is not a declaration that the production site is launch-ready.
 
 References: [Astro GitHub Pages deployment](https://docs.astro.build/en/guides/deploy/github/), [GitHub Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).

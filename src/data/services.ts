@@ -1,11 +1,21 @@
 import type { ImageMetadata } from 'astro';
 
-import imgRestoration from '@/assets/images/placeholder/service-restoration.jpg';
-import imgContents from '@/assets/images/placeholder/service-contents.jpg';
-import imgCommercial from '@/assets/images/placeholder/service-commercial.jpg';
-import imgPostConstruction from '@/assets/images/placeholder/service-postconstruction.jpg';
-import imgRemediation from '@/assets/images/placeholder/hero-remediation.jpg';
-import imgWorkforce from '@/assets/images/placeholder/hero-construction.jpg';
+// Authentic client photographs (portrait 3:4 WebP, EXIF stripped)
+import imgRestoration from '@/assets/images/client/fire-damage-restoration-cleanup.webp';
+import imgContents from '@/assets/images/client/qgs-contents-packout-loading.webp';
+import imgCommercial from '@/assets/images/client/commercial-carpet-extraction.webp';
+import imgPostConstruction from '@/assets/images/client/washroom-detail-cleaning.webp';
+import imgRemediation from '@/assets/images/client/qgs-containment-preparation.webp';
+import imgWorkforce from '@/assets/images/client/commercial-rooftop-cleanup-crew.webp';
+
+// Widescreen landscape placeholders retained solely for full-bleed 100vw PageHero backdrops
+// so portrait client photos are not distorted into ultra-wide banners.
+import heroRestoration from '@/assets/images/placeholder/hero-restoration.jpg';
+import heroContents from '@/assets/images/placeholder/service-contents.jpg';
+import heroCommercial from '@/assets/images/placeholder/service-commercial.jpg';
+import heroPostConstruction from '@/assets/images/placeholder/service-postconstruction.jpg';
+import heroRemediation from '@/assets/images/placeholder/hero-remediation.jpg';
+import heroWorkforce from '@/assets/images/placeholder/hero-construction.jpg';
 
 export interface Service {
   slug: string;
@@ -21,14 +31,18 @@ export interface Service {
   note?: string;
   /** Value for the quote form "service" select */
   formValue: string;
+  /** Authentic client photograph for portrait / vertical editorial containers */
   image: ImageMetadata;
   imageAlt: string;
+  /** CSS object-position focal point for clean framing */
+  imagePosition?: string;
+  /** Widescreen landscape image for full-bleed PageHero backdrops */
+  heroImage: ImageMetadata;
+  heroImageAlt: string;
 }
 
 /**
  * Content source: client questionnaire, "Main services or products to showcase".
- * Service 4 was supplied with a one-line description only; service 6 was cut off
- * in the PDF and completed with the client's own audience wording. Confirm both.
  */
 export const services: Service[] = [
   {
@@ -52,7 +66,10 @@ export const services: Service[] = [
     ],
     formValue: 'restoration-support',
     image: imgRestoration,
-    imageAlt: 'Placeholder: restoration crew removing water-damaged drywall beside air movers',
+    imageAlt: 'Crew members in protective coveralls and respirators performing interior fire-damage cleanup and debris bagging',
+    imagePosition: '50% 42%',
+    heroImage: heroRestoration,
+    heroImageAlt: 'Placeholder: water-damaged commercial interior with drying equipment',
   },
   {
     slug: 'contents-processing-cleaning',
@@ -71,7 +88,10 @@ export const services: Service[] = [
     ],
     formValue: 'contents-processing',
     image: imgContents,
-    imageAlt: 'Placeholder: technician wrapping an armchair for a contents pack-out',
+    imageAlt: 'Quality General Services team members loading wrapped contents from a flatbed cart into a box truck',
+    imagePosition: '50% 35%',
+    heroImage: heroContents,
+    heroImageAlt: 'Placeholder: technician wrapping furniture for a contents pack-out',
   },
   {
     slug: 'commercial-janitorial-cleaning',
@@ -90,7 +110,10 @@ export const services: Service[] = [
     ],
     formValue: 'commercial-cleaning',
     image: imgCommercial,
-    imageAlt: 'Placeholder: cleaner wiping a boardroom table in an open-plan office after hours',
+    imageAlt: 'Technician performing commercial hallway carpet extraction with professional hose equipment',
+    imagePosition: '50% 30%',
+    heroImage: heroCommercial,
+    heroImageAlt: 'Placeholder: cleaner wiping a boardroom table in an open-plan office after hours',
   },
   {
     slug: 'post-construction-cleaning',
@@ -101,7 +124,10 @@ export const services: Service[] = [
     scope: [],
     formValue: 'post-construction',
     image: imgPostConstruction,
-    imageAlt: 'Placeholder: worker removing protective film from new windows in a renovated space',
+    imageAlt: 'Cleaner performing detailed washroom fixture cleaning during renovation and post-construction prep',
+    imagePosition: '50% 35%',
+    heroImage: heroPostConstruction,
+    heroImageAlt: 'Placeholder: worker removing protective film from new windows in a renovated space',
   },
   {
     slug: 'asbestos-abatement-mould-remediation',
@@ -114,7 +140,10 @@ export const services: Service[] = [
     note: 'Subject to applicable licensing, training, certification, and regulatory requirements.',
     formValue: 'asbestos-mould',
     image: imgRemediation,
-    imageAlt: 'Placeholder: technicians in protective coveralls working inside a remediation containment',
+    imageAlt: 'Quality General Services technician preparing sealed plastic containment sheeting inside a work area',
+    imagePosition: '50% 42%',
+    heroImage: heroRemediation,
+    heroImageAlt: 'Placeholder: technicians in protective coveralls working inside a remediation containment',
   },
   {
     slug: 'workforce-staffing-solutions',
@@ -126,7 +155,10 @@ export const services: Service[] = [
     scope: [],
     formValue: 'workforce-staffing',
     image: imgWorkforce,
-    imageAlt: 'Placeholder: two workers cleaning window frames in a newly finished commercial interior',
+    imageAlt: 'Two crew members in protective coveralls clearing debris on a commercial rooftop',
+    imagePosition: '50% 48%',
+    heroImage: heroWorkforce,
+    heroImageAlt: 'Placeholder: workers cleaning window frames in a newly finished commercial interior',
   },
 ];
 

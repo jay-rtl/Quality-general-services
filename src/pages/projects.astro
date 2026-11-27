@@ -6,20 +6,23 @@ import PageHero from '@/components/layout/PageHero.astro';
 import CtaBand from '@/components/layout/CtaBand.astro';
 import { ctas } from '@/data/navigation';
 
-import heroRestoration from '@/assets/images/placeholder/hero-restoration.jpg';
-import heroCommercial from '@/assets/images/placeholder/hero-commercial.jpg';
-import heroConstruction from '@/assets/images/placeholder/hero-construction.jpg';
-import heroRemediation from '@/assets/images/placeholder/hero-remediation.jpg';
-import svcRestoration from '@/assets/images/placeholder/service-restoration.jpg';
-import svcContents from '@/assets/images/placeholder/service-contents.jpg';
-import svcCommercial from '@/assets/images/placeholder/service-commercial.jpg';
-import svcPostConstruction from '@/assets/images/placeholder/service-postconstruction.jpg';
+// Widescreen PageHero backdrop (placeholder retained so portrait photos are not distorted into 100vw banner)
 import galWarehouse from '@/assets/images/placeholder/gallery-warehouse.jpg';
-import galHotel from '@/assets/images/placeholder/gallery-hotel.jpg';
-import galDemolition from '@/assets/images/placeholder/gallery-demolition.jpg';
-import galEquipment from '@/assets/images/placeholder/gallery-equipment.jpg';
 
-type Category = 'restoration' | 'contents' | 'commercial' | 'post-construction' | 'remediation';
+// Authentic client photographs (portrait 3:4 WebP, EXIF stripped)
+import containment from '@/assets/images/client/qgs-containment-preparation.webp';
+import packout from '@/assets/images/client/qgs-contents-packout-loading.webp';
+import fireCleanup from '@/assets/images/client/fire-damage-restoration-cleanup.webp';
+import siteCrew from '@/assets/images/client/restoration-crew-site-cleanup.webp';
+import carpetExtraction from '@/assets/images/client/commercial-carpet-extraction.webp';
+import lobbyCleaning from '@/assets/images/client/commercial-lobby-cleaning.webp';
+import washroomDetail from '@/assets/images/client/washroom-detail-cleaning.webp';
+import demoTile from '@/assets/images/client/interior-demolition-tile-removal.webp';
+import furnitureWrap from '@/assets/images/client/contents-furniture-wrapping.webp';
+import remediationTech from '@/assets/images/client/contained-remediation-technician.webp';
+import rooftopCrew from '@/assets/images/client/commercial-rooftop-cleanup-crew.webp';
+
+type Category = 'restoration' | 'contents' | 'commercial' | 'demolition' | 'remediation' | 'workforce';
 
 interface GalleryItem {
   image: ImageMetadata;
@@ -27,7 +30,9 @@ interface GalleryItem {
   label: string;
   service: string;
   category: Category;
-  span: 'wide' | 'tall' | 'standard';
+  /** Varied portrait-friendly editorial proportions (never stretching 3:4 photos to landscape) */
+  layout: 'feature' | 'tall' | 'standard';
+  position?: string;
 }
 
 const filters: { id: 'all' | Category; label: string }[] = [
@@ -35,128 +40,132 @@ const filters: { id: 'all' | Category; label: string }[] = [
   { id: 'restoration', label: 'Restoration support' },
   { id: 'contents', label: 'Contents processing' },
   { id: 'commercial', label: 'Commercial cleaning' },
-  { id: 'post-construction', label: 'Post-construction' },
-  { id: 'remediation', label: 'Remediation & site work' },
+  { id: 'demolition', label: 'Demolition & site cleanup' },
+  { id: 'remediation', label: 'Specialized remediation' },
+  { id: 'workforce', label: 'Workforce & staffing' },
 ];
 
-// Clearly marked placeholder imagery categorized by QGS service types only.
-// No invented project names, clients, dates, or completion counts.
+// All 11 authentic client photographs categorized strictly by visible work.
+// No unconfirmed remediation types, project names, or locations.
 const items: GalleryItem[] = [
   {
-    image: heroRestoration,
-    alt: 'Placeholder: technician checking moisture in a water-damaged commercial space with drying equipment',
-    label: 'Water damage restoration support',
-    service: 'Restoration Support',
-    category: 'restoration',
-    span: 'wide',
+    image: containment,
+    alt: 'Quality General Services technician preparing sealed plastic containment sheeting inside a work area',
+    label: 'Interior containment preparation',
+    service: 'Specialized Remediation',
+    category: 'remediation',
+    layout: 'feature',
+    position: '50% 42%',
   },
   {
-    image: galHotel,
-    alt: 'Placeholder: commercial cleaning professional vacuuming a hotel corridor',
-    label: 'Hospitality & corridor maintenance',
-    service: 'Commercial & Janitorial Cleaning',
-    category: 'commercial',
-    span: 'tall',
-  },
-  {
-    image: svcRestoration,
-    alt: 'Placeholder: crew removing water-damaged drywall beside air movers',
-    label: 'Flood-cut & drywall removal support',
-    service: 'Restoration Support',
-    category: 'restoration',
-    span: 'standard',
-  },
-  {
-    image: svcContents,
-    alt: 'Placeholder: technician wrapping an armchair in moving blanket and stretch wrap',
-    label: 'Contents pack-out & wrapping',
-    service: 'Contents Processing & Cleaning',
+    image: packout,
+    alt: 'Quality General Services team members loading wrapped contents from a flatbed cart into a box truck',
+    label: 'Contents pack-out & transport loading',
+    service: 'Contents Processing & Handling',
     category: 'contents',
-    span: 'standard',
+    layout: 'tall',
+    position: '50% 35%',
   },
   {
-    image: galWarehouse,
-    alt: 'Placeholder: ride-on floor scrubber cleaning a long industrial warehouse aisle',
-    label: 'Industrial & warehouse floor care',
-    service: 'Commercial & Janitorial Cleaning',
-    category: 'commercial',
-    span: 'wide',
-  },
-  {
-    image: heroRemediation,
-    alt: 'Placeholder: technicians in coveralls working inside polyethylene remediation containment',
-    label: 'Contained remediation environment',
-    service: 'Asbestos Abatement & Mould Remediation',
-    category: 'remediation',
-    span: 'standard',
-  },
-  {
-    image: galEquipment,
-    alt: 'Placeholder: air movers and a portable dehumidifier positioned on concrete floor',
-    label: 'Structural drying & air movement setup',
+    image: fireCleanup,
+    alt: 'Crew members in protective coveralls and respirators performing interior fire-damage cleanup and debris bagging',
+    label: 'Fire & smoke damage cleanup',
     service: 'Restoration Support',
     category: 'restoration',
-    span: 'tall',
+    layout: 'standard',
+    position: '50% 42%',
   },
   {
-    image: svcPostConstruction,
-    alt: 'Placeholder: worker removing protective film from new windows in a renovated space',
-    label: 'Window & finish detail cleaning',
-    service: 'Post-Construction Cleaning',
-    category: 'post-construction',
-    span: 'standard',
-  },
-  {
-    image: heroConstruction,
-    alt: 'Placeholder: crew sweeping and wiping frames in a newly built commercial space',
-    label: 'Final handover sweep & dust removal',
-    service: 'Post-Construction Cleaning',
-    category: 'post-construction',
-    span: 'wide',
-  },
-  {
-    image: svcCommercial,
-    alt: 'Placeholder: cleaner wiping down an office boardroom table after hours',
-    label: 'After-hours office & boardroom care',
-    service: 'Commercial & Janitorial Cleaning',
+    image: carpetExtraction,
+    alt: 'Technician performing commercial hallway carpet extraction with professional hose equipment',
+    label: 'Commercial hallway carpet extraction',
+    service: 'Commercial Cleaning',
     category: 'commercial',
-    span: 'standard',
+    layout: 'standard',
+    position: '50% 30%',
   },
   {
-    image: galDemolition,
-    alt: 'Placeholder: worker loading interior demolition debris into a wheeled bin',
-    label: 'Demolition & site debris cleanup',
-    service: 'Remediation & Site Work',
+    image: rooftopCrew,
+    alt: 'Two crew members in protective coveralls clearing debris on a commercial rooftop',
+    label: 'Commercial rooftop cleanup crew',
+    service: 'Workforce & Staffing',
+    category: 'workforce',
+    layout: 'tall',
+    position: '50% 48%',
+  },
+  {
+    image: siteCrew,
+    alt: 'Multi-person crew in protective coveralls, hard hats, and respirators clearing exterior fire debris',
+    label: 'Multi-person restoration site crew',
+    service: 'Restoration Support',
+    category: 'restoration',
+    layout: 'feature',
+    position: '50% 35%',
+  },
+  {
+    image: demoTile,
+    alt: 'Worker in safety vest and hard hat breaking up and removing floor tile debris inside a framed interior',
+    label: 'Interior floor demolition & debris removal',
+    service: 'Demolition & Site Cleanup',
+    category: 'demolition',
+    layout: 'standard',
+    position: '50% 38%',
+  },
+  {
+    image: furnitureWrap,
+    alt: 'Technician wrapping a sofa in protective bubble wrap during a residential contents pack-out',
+    label: 'Furniture wrapping & protection',
+    service: 'Contents Processing & Handling',
+    category: 'contents',
+    layout: 'standard',
+    position: '50% 40%',
+  },
+  {
+    image: remediationTech,
+    alt: 'Technician in protective coveralls and full-face respirator working behind containment sheeting',
+    label: 'Contained site remediation',
+    service: 'Specialized Remediation',
     category: 'remediation',
-    span: 'standard',
+    layout: 'tall',
+    position: '50% 32%',
   },
   {
-    image: heroCommercial,
-    alt: 'Placeholder: floor scrubber operating in a modern office atrium at dusk',
-    label: 'Atrium & hard-surface maintenance',
-    service: 'Commercial & Janitorial Cleaning',
+    image: lobbyCleaning,
+    alt: 'Cleaner maintaining a commercial reception lobby entrance area',
+    label: 'Commercial reception & entrance care',
+    service: 'Commercial Cleaning',
     category: 'commercial',
-    span: 'wide',
+    layout: 'standard',
+    position: '50% 35%',
+  },
+  {
+    image: washroomDetail,
+    alt: 'Cleaner performing detailed washroom fixture cleaning beside new installation boxes',
+    label: 'Washroom & fixture detail cleaning',
+    service: 'Commercial Cleaning',
+    category: 'commercial',
+    layout: 'standard',
+    position: '50% 35%',
   },
 ];
 ---
 
 <BaseLayout
   title="Projects & Gallery"
-  description="Visual overview of the restoration support, commercial cleaning, post-construction, contents processing, and remediation environments served by Quality General Services."
+  description="Authentic on-site photography of Quality General Services crews across restoration support, contents processing, commercial cleaning, demolition cleanup, and specialized remediation."
   transparentHeader
 >
   <PageHero
     eyebrow="Projects / Gallery"
     index="03"
     title="In the field."
-    lede="A visual look at the environments and scopes our crews support across Calgary and surrounding areas."
+    lede="Authentic on-site photography showing our crews across restoration support, contents handling, commercial cleaning, site cleanup, and remediation."
     image={galWarehouse}
     imageAlt="Placeholder: industrial warehouse floor being scrubbed"
   >
     <p slot="meta" class="border-t border-white/15 pt-6 text-[0.875rem] leading-relaxed text-white/65" data-reveal="fade">
-      All photographs below are temporary placeholder images illustrating QGS service categories until official company
-      project photography is supplied.
+      All gallery photographs below document actual Quality General Services field operations across Calgary and
+      surrounding areas.
     </p>
   </PageHero>
 
@@ -184,34 +193,36 @@ const items: GalleryItem[] = [
     </div>
   </section>
 
-  <!-- Editorial gallery -->
+  <!-- Editorial portrait-native gallery -->
   <section class="section-y bg-paper" aria-label="Gallery images">
     <div class="container-x">
-      <div class="grid gap-x-8 gap-y-16 md:grid-cols-12 md:gap-y-24" data-gallery-grid>
+      <div class="grid items-start gap-x-8 gap-y-16 md:grid-cols-12 md:gap-x-10 md:gap-y-24" data-gallery-grid>
         {
           items.map((item, i) => {
             const colClass =
-              item.span === 'wide'
-                ? 'md:col-span-8'
-                : item.span === 'tall'
-                  ? 'md:col-span-4'
+              item.layout === 'feature'
+                ? 'md:col-span-7'
+                : item.layout === 'tall'
+                  ? 'md:col-span-5 md:mt-12'
                   : 'md:col-span-6';
             const aspectClass =
-              item.span === 'wide'
-                ? 'aspect-[16/10]'
-                : item.span === 'tall'
-                  ? 'aspect-[3/4]'
-                  : 'aspect-[3/2]';
+              item.layout === 'feature'
+                ? 'aspect-[4/5] max-h-[680px]'
+                : item.layout === 'tall'
+                  ? 'aspect-[3/4] max-h-[640px]'
+                  : 'aspect-[4/5] max-h-[600px]';
             return (
               <figure class={`gallery-card ${colClass}`} data-category={item.category}>
                 <div class="overflow-hidden bg-ink" data-reveal="image">
                   <Image
                     src={item.image}
                     alt={item.alt}
-                    widths={[640, 960, 1264]}
-                    sizes="(min-width: 768px) 60vw, 100vw"
+                    widths={[480, 768]}
+                    sizes="(min-width: 768px) 48vw, 100vw"
                     class={`${aspectClass} w-full object-cover transition-transform duration-1000 ease-[var(--ease-cine)] hover:scale-[1.03]`}
-                    quality={72}
+                    style={`object-position: ${item.position ?? '50% 40%'}`}
+                    quality={80}
+                    loading={i < 2 ? 'eager' : 'lazy'}
                   />
                 </div>
                 <figcaption class="mt-4 flex items-baseline justify-between gap-4 border-t border-rule pt-4 text-[0.9375rem]">

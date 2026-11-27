@@ -8,7 +8,7 @@ import ApplicationForm from '@/components/forms/ApplicationForm.astro';
 import { site } from '@/config/site';
 
 import heroImg from '@/assets/images/placeholder/gallery-demolition.jpg';
-import crewImg from '@/assets/images/placeholder/service-postconstruction.jpg';
+import crewImg from '@/assets/images/client/commercial-rooftop-cleanup-crew.webp';
 
 const areas = [
   {
@@ -96,22 +96,23 @@ const expectations = [
   <section class="section-y border-t border-rule bg-bone" aria-labelledby="expect-heading">
     <div class="container-x">
       <div class="grid items-center gap-y-12 lg:grid-cols-12 lg:gap-x-12">
-        <figure class="lg:col-span-6" data-reveal="image" data-from="left">
+        <figure class="lg:col-span-5" data-reveal="image" data-from="left">
           <Image
             src={crewImg}
-            alt="Placeholder: worker cleaning windows on a renovated commercial job site"
-            widths={[640, 960, 1264]}
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            class="aspect-[3/2] w-full object-cover"
-            quality={72}
+            alt="Two Quality General Services crew members in protective coveralls clearing debris on a commercial rooftop"
+            widths={[480, 768]}
+            sizes="(min-width: 1024px) 42vw, 100vw"
+            class="aspect-[4/5] max-h-[580px] w-full object-cover object-[50%_48%]"
+            quality={80}
+            loading="lazy"
           />
           <figcaption class="mt-3 flex justify-between text-[0.8125rem] text-ink-400">
             <span>Safe, structured working environments</span>
-            <span>Placeholder image</span>
+            <span>QGS field crew</span>
           </figcaption>
         </figure>
 
-        <div class="lg:col-span-6">
+        <div class="lg:col-span-6 lg:col-start-7">
           <Eyebrow index="02">What we look for</Eyebrow>
           <h2 id="expect-heading" class="display-md mt-8 max-w-[16ch]" data-reveal="lines">
             Practical, dependable people.

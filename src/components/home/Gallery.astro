@@ -4,29 +4,34 @@ import { Image } from 'astro:assets';
 import Eyebrow from '@/components/ui/Eyebrow.astro';
 import Button from '@/components/ui/Button.astro';
 
-import restoration from '@/assets/images/placeholder/service-restoration.jpg';
-import hotel from '@/assets/images/placeholder/gallery-hotel.jpg';
-import demolition from '@/assets/images/placeholder/gallery-demolition.jpg';
-import equipment from '@/assets/images/placeholder/gallery-equipment.jpg';
-import contents from '@/assets/images/placeholder/service-contents.jpg';
-import commercial from '@/assets/images/placeholder/hero-commercial.jpg';
+import containment from '@/assets/images/client/qgs-containment-preparation.webp';
+import packout from '@/assets/images/client/qgs-contents-packout-loading.webp';
+import fireCleanup from '@/assets/images/client/fire-damage-restoration-cleanup.webp';
+import carpetExtraction from '@/assets/images/client/commercial-carpet-extraction.webp';
+import rooftopCrew from '@/assets/images/client/commercial-rooftop-cleanup-crew.webp';
+import demoTile from '@/assets/images/client/interior-demolition-tile-removal.webp';
+import siteCrew from '@/assets/images/client/restoration-crew-site-cleanup.webp';
+import remediationTech from '@/assets/images/client/contained-remediation-technician.webp';
 
 interface Item {
   image: ImageMetadata;
   alt: string;
   category: string;
-  orientation: 'landscape' | 'portrait';
+  /** Staggered vertical frame height (all natural portrait ratios for 3:4 client photos) */
+  frame: 'tall' | 'medium';
+  position?: string;
 }
 
-// Captions describe service types only — no project names, clients or locations
-// until the client supplies verified project history.
+// Captions describe visible service categories only — no unconfirmed project names or locations.
 const items: Item[] = [
-  { image: restoration, alt: 'Placeholder: crew removing wet drywall after water damage', category: 'Water damage restoration support', orientation: 'landscape' },
-  { image: hotel, alt: 'Placeholder: hotel corridor being vacuumed', category: 'Hospitality cleaning', orientation: 'portrait' },
-  { image: demolition, alt: 'Placeholder: worker loading demolition debris into a bin', category: 'Demolition & site cleanup', orientation: 'landscape' },
-  { image: equipment, alt: 'Placeholder: air movers and a dehumidifier drying a concrete floor', category: 'Structural drying support', orientation: 'portrait' },
-  { image: contents, alt: 'Placeholder: furniture wrapped for a contents pack-out', category: 'Contents pack-out', orientation: 'landscape' },
-  { image: commercial, alt: 'Placeholder: floor scrubber in an office atrium', category: 'Commercial floor care', orientation: 'landscape' },
+  { image: containment, alt: 'Quality General Services technician preparing sealed plastic containment sheeting', category: 'Site containment preparation', frame: 'tall', position: '50% 42%' },
+  { image: packout, alt: 'Quality General Services crew loading wrapped contents from a cart into a truck', category: 'Contents pack-out & loading', frame: 'medium', position: '50% 35%' },
+  { image: fireCleanup, alt: 'Crew in protective coveralls and respirators performing interior fire-damage cleanup', category: 'Fire & smoke restoration support', frame: 'tall', position: '50% 40%' },
+  { image: carpetExtraction, alt: 'Technician performing commercial hallway carpet extraction', category: 'Commercial floor & carpet care', frame: 'medium', position: '50% 30%' },
+  { image: rooftopCrew, alt: 'Two crew members in protective coveralls clearing debris on a commercial rooftop', category: 'Commercial rooftop cleanup', frame: 'tall', position: '50% 48%' },
+  { image: demoTile, alt: 'Worker in safety vest and hard hat removing broken floor tile during interior demolition', category: 'Demolition & site cleanup', frame: 'medium', position: '50% 38%' },
+  { image: siteCrew, alt: 'Multi-person crew in protective gear conducting exterior restoration site cleanup', category: 'Restoration crew support', frame: 'tall', position: '50% 35%' },
+  { image: remediationTech, alt: 'Technician in protective coveralls and respirator working inside a contained area', category: 'Specialized remediation', frame: 'medium', position: '50% 32%' },
 ];
 ---
 
@@ -40,8 +45,8 @@ const items: Item[] = [
         </div>
         <div class="flex items-center gap-8" data-reveal="fade">
           <p class="hidden max-w-[22rem] text-[0.9375rem] text-ink-500 md:block">
-            A look at the kinds of sites and services our crews support. Official project photography will replace these
-            placeholders.
+            Authentic on-site photography from our restoration support, contents handling, cleaning, and remediation
+            crews.
           </p>
           <Button href="/projects" variant="outline-dark" class="shrink-0">View projects</Button>
         </div>
@@ -59,14 +64,23 @@ const items: Item[] = [
           items.map((it, i) => (
             <li class="shrink-0 snap-start">
               <figure>
-                <div class:list={['overflow-hidden bg-ink', it.orientation === 'portrait' ? 'h-[44svh] max-h-[640px] min-h-[290px] aspect-[3/4] lg:h-[52vh] lg:min-h-[340px]' : 'h-[36svh] max-h-[540px] min-h-[220px] aspect-[3/2] lg:h-[44vh] lg:min-h-[260px]']}>
+                <div
+                  class:list={[
+                    'overflow-hidden bg-ink',
+                    it.frame === 'tall'
+                      ? 'h-[46svh] max-h-[620px] min-h-[290px] aspect-[3/4] lg:h-[54vh] lg:min-h-[340px]'
+                      : 'h-[39svh] max-h-[530px] min-h-[245px] aspect-[4/5] lg:h-[46vh] lg:min-h-[280px]',
+                  ]}
+                >
                   <Image
                     src={it.image}
                     alt={it.alt}
-                    widths={[480, 800, 1264]}
-                    sizes="(min-width: 1024px) 40vw, 80vw"
+                    widths={[400, 768]}
+                    sizes="(min-width: 1024px) 32vw, 72vw"
                     class="gallery-img h-full w-full scale-110 object-cover"
-                    quality={70}
+                    style={`object-position: ${it.position ?? '50% 40%'}`}
+                    quality={80}
+                    loading="lazy"
                     data-gallery-img
                   />
                 </div>
@@ -79,7 +93,7 @@ const items: Item[] = [
           ))
         }
         <li class="flex shrink-0 snap-start items-center self-stretch pr-[var(--gutter)]">
-          <a href="/projects" class="group/more flex h-[36svh] max-h-[540px] min-h-[220px] w-[min(70vw,22rem)] flex-col justify-between border-l border-rule pl-8 lg:h-[44vh] lg:min-h-[260px]">
+          <a href="/projects" class="group/more flex h-[39svh] max-h-[530px] min-h-[245px] w-[min(70vw,22rem)] flex-col justify-between border-l border-rule pl-8 lg:h-[46vh] lg:min-h-[280px]">
             <span class="index-num text-ink-400">All work</span>
             <span class="display-sm transition-colors duration-500 group-hover/more:text-signal">View the full gallery →</span>
           </a>

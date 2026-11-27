@@ -9,6 +9,9 @@ public/api/
 qgs-private/
 artifacts/
 coverage/
+/assets/
+/docs/
+BACKEND_HANDOVER.md
 *.pdf
 *.doc
 *.docx
