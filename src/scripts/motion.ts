@@ -43,12 +43,18 @@ export async function initMotion() {
       if (el.closest('[data-hero]')) return; // hero handles its own intro
       const split = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'split-line-inner' });
       gsap.set(el, { visibility: 'visible' });
+      const pinContainer = el.closest<HTMLElement>('[data-gallery-pin]');
       gsap.from(split.lines, {
         yPercent: 110,
         duration: 1.3,
         ease: EASE,
         stagger: 0.09,
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        scrollTrigger: {
+          trigger: pinContainer ? el.closest('[data-gallery]') ?? el : el,
+          start: 'top 90%',
+          once: true,
+          fastScrollEnd: true,
+        },
       });
     });
 
@@ -70,6 +76,7 @@ export async function initMotion() {
     // Fade
     gsap.utils.toArray<HTMLElement>('[data-reveal="fade"]').forEach((el) => {
       if (el.closest('[data-hero]')) return;
+      const pinContainer = el.closest<HTMLElement>('[data-gallery-pin]');
       gsap.fromTo(
         el,
         { autoAlpha: 0, y: 28 },
@@ -79,7 +86,12 @@ export async function initMotion() {
           duration: 1.2,
           ease: EASE,
           delay: Number(el.dataset.delay ?? 0),
-          scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+          scrollTrigger: {
+            trigger: pinContainer ? el.closest('[data-gallery]') ?? el : el,
+            start: 'top 92%',
+            once: true,
+            fastScrollEnd: true,
+          },
         },
       );
     });
@@ -96,7 +108,7 @@ export async function initMotion() {
           duration: 1.1,
           ease: EASE,
           stagger: 0.07,
-          scrollTrigger: { trigger: group, start: 'top 85%', once: true },
+          scrollTrigger: { trigger: group, start: 'top 90%', once: true, fastScrollEnd: true },
         },
       );
     });
@@ -107,9 +119,9 @@ export async function initMotion() {
       const dir = el.dataset.from ?? 'bottom';
       const start =
         dir === 'left' ? 'inset(0% 100% 0% 0%)' : dir === 'right' ? 'inset(0% 0% 0% 100%)' : 'inset(100% 0% 0% 0%)';
-      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-      tl.fromTo(el, { clipPath: start }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut' });
-      if (media) tl.fromTo(media, { scale: 1.25 }, { scale: 1, duration: 2.2, ease: EASE }, 0);
+      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 90%', once: true, fastScrollEnd: true } });
+      tl.fromTo(el, { clipPath: start }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut' });
+      if (media) tl.fromTo(media, { scale: 1.25 }, { scale: 1, duration: 2.0, ease: EASE }, 0);
     });
 
     // Parallax
@@ -127,6 +139,14 @@ export async function initMotion() {
     });
   });
 
-  // Refresh after images load to keep trigger positions correct.
-  window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
+  // Sort triggers in DOM/priority order and refresh once everything has mounted.
+  ScrollTrigger.sort();
+  requestAnimationFrame(() => ScrollTrigger.refresh());
+
+  // Refresh after all page assets finish loading (even if load already fired).
+  if (document.readyState === 'complete') {
+    ScrollTrigger.refresh();
+  } else {
+    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
+  }
 }
